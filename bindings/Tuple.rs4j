@@ -1,0 +1,9 @@
+class Tuple<A, B> {
+    bound A: Clone;
+    bound B: Clone;
+
+    static fn of(first: A, second: B) -> Tuple<A, B>;
+    
+    fn first() -> A;
+    fn second() -> B;
+};

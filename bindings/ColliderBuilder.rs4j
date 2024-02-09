@@ -1,0 +1,73 @@
+class ColliderBuilder {
+    // =============== Constructors ===============
+
+    [new] static fn create(shape: SharedShape) -> ColliderBuilder;
+
+    static fn ColliderBuilderCustom::compound(shapes: List<Tuple<Isometry<f32>, SharedShape>>) -> ColliderBuilder;
+    static fn ball(radius: f32) -> ColliderBuilder;
+    static fn halfspace(outward_normal: Unit<Vector<f32>>) -> ColliderBuilder;
+    static fn cylinder(half_height: f32, radius: f32) -> ColliderBuilder;
+    static fn round_cylinder(half_height: f32, radius: f32, border_radius: f32) -> ColliderBuilder;
+    static fn cone(half_height: f32, radius: f32) -> ColliderBuilder;
+    static fn round_cone(half_height: f32, radius: f32, border_radius: f32) -> ColliderBuilder;
+    static fn capsule_x(half_height: f32, radius: f32) -> ColliderBuilder;
+    static fn capsule_y(half_height: f32, radius: f32) -> ColliderBuilder;
+    static fn capsule_z(half_height: f32, radius: f32) -> ColliderBuilder;
+    static fn cuboid(hx: f32, hy: f32, hz: f32) -> ColliderBuilder;
+    static fn round_cuboid(hx: f32, hy: f32, hz: f32, border_radius: f32) -> ColliderBuilder;
+    static fn segment(a: Point<f32>, b: Point<f32>) -> ColliderBuilder;
+    static fn triangle(a: Point<f32>, b: Point<f32>, c: Point<f32>) -> ColliderBuilder;
+    static fn round_triangle(a: Point<f32>, b: Point<f32>, c: Point<f32>, border_radius: f32) -> ColliderBuilder;
+    static fn heightfield(heights: DMatrix<f32>, scale: Vector<f32>) -> ColliderBuilder;
+    
+    static fn ColliderBuilderCustom::polyline(vertices: List<Point<f32>>, indices: Optional<List<Tuple<u32, u32>>>) -> ColliderBuilder;
+    static fn ColliderBuilderCustom::trimesh(vertices: List<Point<f32>>, indices: List<Triple<u32, u32, u32>>) -> ColliderBuilder;
+    static fn ColliderBuilderCustom::trimesh_with_flags(vertices: List<Point<f32>>, indices: List<Triple<u32, u32, u32>>, flags: TriMeshFlags) -> ColliderBuilder;
+    static fn ColliderBuilderCustom::convex_decomposition(vertices: List<Point<f32>>, indices: List<Triple<u32, u32, u32>>) -> ColliderBuilder;
+    static fn ColliderBuilderCustom::round_convex_decomposition(vertices: List<Point<f32>>, indices: List<Triple<u32, u32, u32>>, border_radius: f32) -> ColliderBuilder;
+    static fn ColliderBuilderCustom::convex_decomposition_with_params(vertices: List<Point<f32>>, indices: List<Triple<u32, u32, u32>>, params: &VHACDParameters) -> ColliderBuilder;
+    static fn ColliderBuilderCustom::round_convex_decomposition_with_params(vertices: List<Point<f32>>, indices: List<Triple<u32, u32, u32>>, params: &VHACDParameters, border_radius: f32) -> ColliderBuilder;
+    
+    static optional fn ColliderBuilderCustom::convex_hull(points: List<Point<f32>>) -> ColliderBuilder;
+    static optional fn ColliderBuilderCustom::round_convex_hull(points: List<Point<f32>>, border_radius: f32) -> ColliderBuilder;
+    static optional fn ColliderBuilderCustom::convex_mesh(points: List<Point<f32>>, indices: List<Triple<u32, u32, u32>>) -> ColliderBuilder;
+    static optional fn ColliderBuilderCustom::round_convex_mesh(points: List<Point<f32>>, indices: List<Triple<u32, u32, u32>>, border_radius: f32) -> ColliderBuilder;
+
+    // =============== Normal methods ===============
+    
+    fn build() -> Collider;
+
+    // =============== Static methods ===============
+
+    static fn default_friction() -> f32;
+    static fn default_density() -> f32;
+
+    // =============== Consumed methods ===============
+
+    consumed fn user_data(data: u128) -> ColliderBuilder;
+    consumed fn collision_groups(groups: InteractionGroups) -> ColliderBuilder;
+    consumed fn solver_groups(groups: InteractionGroups) -> ColliderBuilder;
+    consumed fn sensor(is_sensor: bool) -> ColliderBuilder;
+    consumed fn active_hooks(active_hooks: ActiveHooks) -> ColliderBuilder;
+    consumed fn active_events(active_events: ActiveEvents) -> ColliderBuilder;
+    consumed fn active_collision_types(active_collision_types: ActiveCollisionTypes) -> ColliderBuilder;
+    consumed fn friction(friction: f32) -> ColliderBuilder;
+    consumed fn friction_combine_rule(rule: CoefficientCombineRule) -> ColliderBuilder;
+    consumed fn restitution(restitution: f32) -> ColliderBuilder;
+    consumed fn restitution_combine_rule(rule: CoefficientCombineRule) -> ColliderBuilder;
+    consumed fn density(density: f32) -> ColliderBuilder;
+    consumed fn mass(mass: f32) -> ColliderBuilder;
+    consumed fn mass_properties(mass_properties: MassProperties) -> ColliderBuilder;
+    consumed fn contact_force_event_threshold(threshold: f32) -> ColliderBuilder;
+    consumed fn translation(translation: Vector<f32>) -> ColliderBuilder;
+    consumed fn rotation(rotation: AngVector<f32>) -> ColliderBuilder;
+    consumed fn position(pos: Isometry<f32>) -> ColliderBuilder;
+    consumed fn position_wrt_parent(pos: Isometry<f32>) -> ColliderBuilder;
+    consumed fn delta(delta: Isometry<f32>) -> ColliderBuilder;
+    consumed fn enabled(enabled: bool) -> ColliderBuilder;
+
+    // =============== Trait methods ===============
+
+    fn clone() -> ColliderBuilder;
+    mut fn clone_from(other: &ColliderBuilder);
+};

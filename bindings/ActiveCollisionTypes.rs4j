@@ -1,0 +1,15 @@
+class ActiveCollisionTypes {
+    static fn empty() -> ActiveCollisionTypes;
+    static fn all() -> ActiveCollisionTypes;
+    [default] static fn create() -> ActiveCollisionTypes;
+
+    [active_collision_types_dynamic_dynamic] static fn BitflagsHelper::dynamic_dynamic() -> u16;
+    [active_collision_types_dynamic_kinematic] static fn BitflagsHelper::dynamic_kinematic() -> u16;
+    [active_collision_types_dynamic_fixed] static fn BitflagsHelper::dynamic_fixed() -> u16;
+    [active_collision_types_kinematic_kinematic] static fn BitflagsHelper::kinematic_kinematic() -> u16;
+    [active_collision_types_kinematic_fixed] static fn BitflagsHelper::kinematic_fixed() -> u16;
+    [active_collision_types_fixed_fixed] static fn BitflagsHelper::fixed_fixed() -> u16;
+
+    [from_bits] static optional fn of(bits: u16) -> ActiveCollisionTypes;
+    [bits] fn valueOf() -> u16;
+};

@@ -1,0 +1,10 @@
+class ActiveEvents {
+    static fn empty() -> ActiveEvents;
+    static fn all() -> ActiveEvents;
+    [default] static fn create() -> ActiveEvents;
+
+    [active_events_collison_events] static fn BitflagsHelper::collision_events() -> u32;
+    [active_events_contact_force_events] static fn BitflagsHelper::contact_force_events() -> u32;
+    [from_bits] static optional fn of(bits: u32) -> ActiveEvents;
+    [bits] fn valueOf() -> u32;
+};

@@ -1,0 +1,11 @@
+class ActiveHooks {
+    static fn empty() -> ActiveHooks;
+    static fn all() -> ActiveHooks;
+    [default] static fn create() -> ActiveHooks;
+
+    [active_hooks_filter_contact_pairs] static fn BitflagsHelper::filter_contact_pairs() -> u32;
+    [active_hooks_filter_intersection_pair] static fn BitflagsHelper::filter_intersection_pair() -> u32;
+    [active_hooks_modify_solver_contacts] static fn BitflagsHelper::modify_solver_contacts() -> u32;
+    [from_bits] static optional fn of(bits: u32) -> ActiveHooks;
+    [bits] fn valueOf() -> u32;
+};

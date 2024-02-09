@@ -1,0 +1,15 @@
+[package]
+name = "rapier4j"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.79"
+jni = "0.21.1"
+nalgebra = "0.32.3"
+parry3d = { version = "0.13.6", features = ["parallel"] }
+rapier3d = { version = "0.18.0", features = ["parallel"] }
+
+[build-dependencies]
+anyhow = "1.0.79"
+rs4j = { version = "0.4.1", path = "../rs4j" }

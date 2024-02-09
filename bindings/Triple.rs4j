@@ -1,0 +1,11 @@
+class Triple<A, B, C> {
+    bound A: Clone;
+    bound B: Clone;
+    bound C: Clone;
+
+    static fn of(first: A, second: B, third: C) -> Triple<A, B, C>;
+    
+    fn first() -> A;
+    fn second() -> B;
+    fn third() -> C;
+};
