@@ -20,6 +20,10 @@ where
     pub fn of(a: A, b: B) -> Self {
         Self(a, b)
     }
+
+    pub fn from_rust(v: (A, B)) -> Self {
+        Self(v.0, v.1)
+    }
 }
 
 impl Tuple<u32, u32> {
@@ -71,6 +75,10 @@ where
 
     pub fn of(a: A, b: B, c: C) -> Self {
         Self(a, b, c)
+    }
+
+    pub fn from_rust(v: (A, B, C)) -> Self {
+        Self(v.0, v.1, v.2)
     }
 }
 

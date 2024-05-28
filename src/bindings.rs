@@ -170,6 +170,399 @@ impl IntoJavaType for RustTypes {
     no_mangle_generic_items,
     deprecated,
 )]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Unit_jni_new_unchecked<'local, T, N>(
+    mut env: *mut jni::JNIEnv<'local>,
+    class: jni::objects::JClass<'local>,
+    value: T
+) -> jobject where
+    T: Normed<Norm = N> + Clone,
+    N: SimdRealField + RealField + Clone,
+ {
+    object_to_jobject(env, Unit::new_unchecked(value), "com/dimforge/rapier3d/Unit".to_string())
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Unit_jni_from_ref_unchecked<'local, T, N>(
+    mut env: *mut jni::JNIEnv<'local>,
+    class: jni::objects::JClass<'local>,
+    value: &T
+) -> jobject where
+    T: Normed<Norm = N> + Clone,
+    N: SimdRealField + RealField + Clone,
+ {
+    object_to_jobject(env, Unit::from_ref_unchecked(value), "com/dimforge/rapier3d/Unit".to_string())
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Unit_jni_new_normalize<'local, T, N>(
+    mut env: *mut jni::JNIEnv<'local>,
+    class: jni::objects::JClass<'local>,
+    value: T
+) -> jobject where
+    T: Normed<Norm = N> + Clone,
+    N: SimdRealField + RealField + Clone,
+ {
+    object_to_jobject(env, Unit::new_normalize(value), "com/dimforge/rapier3d/Unit".to_string())
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Unit_jni_new_and_get<'local, T, N>(
+    mut env: *mut jni::JNIEnv<'local>,
+    class: jni::objects::JClass<'local>,
+    value: T
+) -> jobject where
+    T: Normed<Norm = N> + Clone,
+    N: SimdRealField + RealField + Clone,
+ {
+    object_to_jobject(env, UnitHelper::new_and_get(value), "com/dimforge/rapier3d/Unit".to_string())
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Unit_jni_try_new<'local, T, N>(
+    mut env: *mut jni::JNIEnv<'local>,
+    class: jni::objects::JClass<'local>,
+    value: T,
+    min_norm: N
+) -> jobject where
+    T: Normed<Norm = N> + Clone,
+    N: SimdRealField + RealField + Clone,
+ {
+    object_to_jobject(env, Unit::try_new(value, min_norm), "com/dimforge/rapier3d/Unit".to_string())
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Unit_jni_try_new_and_get<'local, T, N>(
+    mut env: *mut jni::JNIEnv<'local>,
+    class: jni::objects::JClass<'local>,
+    value: T,
+    min_norm: N
+) -> jobject where
+    T: Normed<Norm = N> + Clone,
+    N: SimdRealField + RealField + Clone,
+ {
+    object_to_jobject(env, Unit::try_new_and_get(value, min_norm), "com/dimforge/rapier3d/Unit".to_string())
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Unit_jni_into_inner<'local, T, N>(
+    mut env: *mut jni::JNIEnv<'local>,
+    class: jni::objects::JClass<'local>,
+    this: jlong
+) -> jobject where
+    T: Normed<Norm = N> + Clone,
+    N: SimdRealField + RealField + Clone,
+ {
+    let this: &Unit<T> = jlong_to_pointer::<Unit<T>>(this).as_mut().unwrap();
+    let this = this.clone();
+    object_to_jobject(env, Unit::into_inner(this), "com/dimforge/rapier3d/Unit".to_string())
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Unit_jni_unwrap<'local, T, N>(
+    mut env: *mut jni::JNIEnv<'local>,
+    class: jni::objects::JClass<'local>,
+    this: jlong
+) -> jobject where
+    T: Normed<Norm = N> + Clone,
+    N: SimdRealField + RealField + Clone,
+ {
+    let this: &Unit<T> = jlong_to_pointer::<Unit<T>>(this).as_mut().unwrap();
+    let this = this.clone();
+    object_to_jobject(env, Unit::unwrap(this), "com/dimforge/rapier3d/Unit".to_string())
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Unit_jni_renormalize<'local, T, N>(
+    mut env: *mut jni::JNIEnv<'local>,
+    class: jni::objects::JClass<'local>,
+    this: jlong
+) -> jobject where
+    T: Normed<Norm = N> + Clone,
+    N: SimdRealField + RealField + Clone,
+ {
+    let this: &mut Unit<T> = jlong_to_pointer::<Unit<T>>(this).as_mut().unwrap();
+    object_to_jobject(env, Unit::renormalize(this), "com/dimforge/rapier3d/Unit".to_string())
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Unit_jni_renormalize_fast<'local, T, N>(
+    mut env: *mut jni::JNIEnv<'local>,
+    class: jni::objects::JClass<'local>,
+    this: jlong
+) -> jobject where
+    T: Normed<Norm = N> + Clone,
+    N: SimdRealField + RealField + Clone,
+ {
+    let this: &mut Unit<T> = jlong_to_pointer::<Unit<T>>(this).as_mut().unwrap();
+    object_to_jobject(env, Unit::renormalize_fast(this), "com/dimforge/rapier3d/Unit".to_string())
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Unit_jni_as_mut_unchecked<'local, T, N>(
+    mut env: *mut jni::JNIEnv<'local>,
+    class: jni::objects::JClass<'local>,
+    this: jlong
+) -> jobject where
+    T: Normed<Norm = N> + Clone,
+    N: SimdRealField + RealField + Clone,
+ {
+    let this: &mut Unit<T> = jlong_to_pointer::<Unit<T>>(this).as_mut().unwrap();
+    object_to_jobject(env, Unit::as_mut_unchecked(this), "com/dimforge/rapier3d/Unit".to_string())
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_of<'local>(
+    mut env: *mut jni::JNIEnv<'local>,
+    class: jni::objects::JClass<'local>,
+    x: f32,
+    y: f32,
+    z: f32
+) -> jobject {
+    object_to_jobject(env, Vector3::new(x, y, z), "com/dimforge/rapier3d/Vector3".to_string())
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_create<'local>(
+    mut env: *mut jni::JNIEnv<'local>,
+    class: jni::objects::JClass<'local>
+) -> jobject {
+    object_to_jobject(env, Vector3::default(), "com/dimforge/rapier3d/Vector3".to_string())
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_x<'local>(
+    mut env: *mut jni::JNIEnv<'local>,
+    class: jni::objects::JClass<'local>,
+    this: jlong
+) -> jobject {
+    let this: &Vector3 = jlong_to_pointer::<Vector3>(this).as_mut().unwrap();
+    object_to_jobject(env, Vector3::x(this), "com/dimforge/rapier3d/Vector3".to_string())
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_y<'local>(
+    mut env: *mut jni::JNIEnv<'local>,
+    class: jni::objects::JClass<'local>,
+    this: jlong
+) -> jobject {
+    let this: &Vector3 = jlong_to_pointer::<Vector3>(this).as_mut().unwrap();
+    object_to_jobject(env, Vector3::y(this), "com/dimforge/rapier3d/Vector3".to_string())
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_z<'local>(
+    mut env: *mut jni::JNIEnv<'local>,
+    class: jni::objects::JClass<'local>,
+    this: jlong
+) -> jobject {
+    let this: &Vector3 = jlong_to_pointer::<Vector3>(this).as_mut().unwrap();
+    object_to_jobject(env, Vector3::z(this), "com/dimforge/rapier3d/Vector3".to_string())
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_add<'local>(
+    mut env: *mut jni::JNIEnv<'local>,
+    class: jni::objects::JClass<'local>,
+    this: jlong,
+    other: Vector3
+) -> jobject {
+    let this: &mut Vector3 = jlong_to_pointer::<Vector3>(this).as_mut().unwrap();
+    object_to_jobject(env, Vector3::add(this, other), "com/dimforge/rapier3d/Vector3".to_string())
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_sub<'local>(
+    mut env: *mut jni::JNIEnv<'local>,
+    class: jni::objects::JClass<'local>,
+    this: jlong,
+    other: Vector3
+) -> jobject {
+    let this: &mut Vector3 = jlong_to_pointer::<Vector3>(this).as_mut().unwrap();
+    object_to_jobject(env, Vector3::sub(this, other), "com/dimforge/rapier3d/Vector3".to_string())
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_clone<'local>(
+    mut env: *mut jni::JNIEnv<'local>,
+    class: jni::objects::JClass<'local>,
+    this: jlong
+) -> jobject {
+    let this: &Vector3 = jlong_to_pointer::<Vector3>(this).as_mut().unwrap();
+    object_to_jobject(env, Vector3::clone(this), "com/dimforge/rapier3d/Vector3".to_string())
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+)]
 pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveCollisionTypes_jni_empty<'local>(
     mut env: *mut jni::JNIEnv<'local>,
     class: jni::objects::JClass<'local>
@@ -1635,7 +2028,7 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_cre
 pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_compound<'local>(
     mut env: *mut jni::JNIEnv<'local>,
     class: jni::objects::JClass<'local>,
-    shapes: List<Tuple<Isometry<f32>, SharedShape>>
+    shapes: List<Tuple<Vector3, SharedShape>>
 ) -> jobject {
     object_to_jobject(env, ColliderBuilderCustom::compound(shapes), "com/dimforge/rapier3d/ColliderBuilder".to_string())
 }
@@ -1671,9 +2064,9 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_bal
 pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_halfspace<'local>(
     mut env: *mut jni::JNIEnv<'local>,
     class: jni::objects::JClass<'local>,
-    outward_normal: Unit<Vector<f32>>
+    outward_normal: Vector3
 ) -> jobject {
-    object_to_jobject(env, ColliderBuilder::halfspace(outward_normal), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+    object_to_jobject(env, ColliderBuilder::halfspace(outward_normal.into()), "com/dimforge/rapier3d/ColliderBuilder".to_string())
 }
 
 #[no_mangle]
@@ -1865,10 +2258,10 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_rou
 pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_segment<'local>(
     mut env: *mut jni::JNIEnv<'local>,
     class: jni::objects::JClass<'local>,
-    a: Point<f32>,
-    b: Point<f32>
+    a: Vector3,
+    b: Vector3
 ) -> jobject {
-    object_to_jobject(env, ColliderBuilder::segment(a, b), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+    object_to_jobject(env, ColliderBuilder::segment(a.into(), b), "com/dimforge/rapier3d/ColliderBuilder".to_string())
 }
 
 #[no_mangle]
@@ -1884,11 +2277,11 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_seg
 pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_triangle<'local>(
     mut env: *mut jni::JNIEnv<'local>,
     class: jni::objects::JClass<'local>,
-    a: Point<f32>,
-    b: Point<f32>,
-    c: Point<f32>
+    a: Vector3,
+    b: Vector3,
+    c: Vector3
 ) -> jobject {
-    object_to_jobject(env, ColliderBuilder::triangle(a, b, c), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+    object_to_jobject(env, ColliderBuilder::triangle(a.into(), b, c), "com/dimforge/rapier3d/ColliderBuilder".to_string())
 }
 
 #[no_mangle]
@@ -1904,12 +2297,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_tri
 pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_round_triangle<'local>(
     mut env: *mut jni::JNIEnv<'local>,
     class: jni::objects::JClass<'local>,
-    a: Point<f32>,
-    b: Point<f32>,
-    c: Point<f32>,
+    a: Vector3,
+    b: Vector3,
+    c: Vector3,
     border_radius: f32
 ) -> jobject {
-    object_to_jobject(env, ColliderBuilder::round_triangle(a, b, c, border_radius), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+    object_to_jobject(env, ColliderBuilder::round_triangle(a.into(), b, c, border_radius), "com/dimforge/rapier3d/ColliderBuilder".to_string())
 }
 
 #[no_mangle]
@@ -1944,7 +2337,7 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_hei
 pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_polyline<'local>(
     mut env: *mut jni::JNIEnv<'local>,
     class: jni::objects::JClass<'local>,
-    vertices: List<Point<f32>>,
+    vertices: List<Vector3>,
     indices: Optional<List<Tuple<u32, u32>>>
 ) -> jobject {
     object_to_jobject(env, ColliderBuilderCustom::polyline(vertices, indices), "com/dimforge/rapier3d/ColliderBuilder".to_string())
@@ -1963,7 +2356,7 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_pol
 pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_trimesh<'local>(
     mut env: *mut jni::JNIEnv<'local>,
     class: jni::objects::JClass<'local>,
-    vertices: List<Point<f32>>,
+    vertices: List<Vector3>,
     indices: List<Triple<u32, u32, u32>>
 ) -> jobject {
     object_to_jobject(env, ColliderBuilderCustom::trimesh(vertices, indices), "com/dimforge/rapier3d/ColliderBuilder".to_string())
@@ -1982,7 +2375,7 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_tri
 pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_trimesh_with_flags<'local>(
     mut env: *mut jni::JNIEnv<'local>,
     class: jni::objects::JClass<'local>,
-    vertices: List<Point<f32>>,
+    vertices: List<Vector3>,
     indices: List<Triple<u32, u32, u32>>,
     flags: TriMeshFlags
 ) -> jobject {
@@ -2002,7 +2395,7 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_tri
 pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_convex_decomposition<'local>(
     mut env: *mut jni::JNIEnv<'local>,
     class: jni::objects::JClass<'local>,
-    vertices: List<Point<f32>>,
+    vertices: List<Vector3>,
     indices: List<Triple<u32, u32, u32>>
 ) -> jobject {
     object_to_jobject(env, ColliderBuilderCustom::convex_decomposition(vertices, indices), "com/dimforge/rapier3d/ColliderBuilder".to_string())
@@ -2021,7 +2414,7 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_con
 pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_round_convex_decomposition<'local>(
     mut env: *mut jni::JNIEnv<'local>,
     class: jni::objects::JClass<'local>,
-    vertices: List<Point<f32>>,
+    vertices: List<Vector3>,
     indices: List<Triple<u32, u32, u32>>,
     border_radius: f32
 ) -> jobject {
@@ -2041,7 +2434,7 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_rou
 pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_convex_decomposition_with_params<'local>(
     mut env: *mut jni::JNIEnv<'local>,
     class: jni::objects::JClass<'local>,
-    vertices: List<Point<f32>>,
+    vertices: List<Vector3>,
     indices: List<Triple<u32, u32, u32>>,
     params: &VHACDParameters
 ) -> jobject {
@@ -2061,7 +2454,7 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_con
 pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_round_convex_decomposition_with_params<'local>(
     mut env: *mut jni::JNIEnv<'local>,
     class: jni::objects::JClass<'local>,
-    vertices: List<Point<f32>>,
+    vertices: List<Vector3>,
     indices: List<Triple<u32, u32, u32>>,
     params: &VHACDParameters,
     border_radius: f32
@@ -2082,7 +2475,7 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_rou
 pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_convex_hull<'local>(
     mut env: *mut jni::JNIEnv<'local>,
     class: jni::objects::JClass<'local>,
-    points: List<Point<f32>>
+    points: List<Vector3>
 ) -> jobject {
     object_to_jobject(env, ColliderBuilderCustom::convex_hull(points), "com/dimforge/rapier3d/ColliderBuilder".to_string())
 }
@@ -2100,7 +2493,7 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_con
 pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_round_convex_hull<'local>(
     mut env: *mut jni::JNIEnv<'local>,
     class: jni::objects::JClass<'local>,
-    points: List<Point<f32>>,
+    points: List<Vector3>,
     border_radius: f32
 ) -> jobject {
     object_to_jobject(env, ColliderBuilderCustom::round_convex_hull(points, border_radius), "com/dimforge/rapier3d/ColliderBuilder".to_string())
@@ -2119,7 +2512,7 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_rou
 pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_convex_mesh<'local>(
     mut env: *mut jni::JNIEnv<'local>,
     class: jni::objects::JClass<'local>,
-    points: List<Point<f32>>,
+    points: List<Vector3>,
     indices: List<Triple<u32, u32, u32>>
 ) -> jobject {
     object_to_jobject(env, ColliderBuilderCustom::convex_mesh(points, indices), "com/dimforge/rapier3d/ColliderBuilder".to_string())
@@ -2138,7 +2531,7 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_con
 pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_round_convex_mesh<'local>(
     mut env: *mut jni::JNIEnv<'local>,
     class: jni::objects::JClass<'local>,
-    points: List<Point<f32>>,
+    points: List<Vector3>,
     indices: List<Triple<u32, u32, u32>>,
     border_radius: f32
 ) -> jobject {
@@ -2527,11 +2920,11 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_tra
     mut env: *mut jni::JNIEnv<'local>,
     class: jni::objects::JClass<'local>,
     this: jlong,
-    translation: Vector<f32>
+    translation: Vector3
 ) -> jobject {
     let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
     let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::translation(this, translation), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+    object_to_jobject(env, ColliderBuilder::translation(this, translation.into()), "com/dimforge/rapier3d/ColliderBuilder".to_string())
 }
 
 #[no_mangle]
@@ -2548,11 +2941,11 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_rot
     mut env: *mut jni::JNIEnv<'local>,
     class: jni::objects::JClass<'local>,
     this: jlong,
-    rotation: AngVector<f32>
+    rotation: Vector3
 ) -> jobject {
     let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
     let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::rotation(this, rotation), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+    object_to_jobject(env, ColliderBuilder::rotation(this, rotation.into()), "com/dimforge/rapier3d/ColliderBuilder".to_string())
 }
 
 #[no_mangle]
@@ -2569,11 +2962,11 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_pos
     mut env: *mut jni::JNIEnv<'local>,
     class: jni::objects::JClass<'local>,
     this: jlong,
-    pos: Isometry<f32>
+    pos: Vector3
 ) -> jobject {
     let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
     let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::position(this, pos), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+    object_to_jobject(env, ColliderBuilder::position(this, pos.into()), "com/dimforge/rapier3d/ColliderBuilder".to_string())
 }
 
 #[no_mangle]
@@ -2590,11 +2983,11 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_pos
     mut env: *mut jni::JNIEnv<'local>,
     class: jni::objects::JClass<'local>,
     this: jlong,
-    pos: Isometry<f32>
+    pos: Vector3
 ) -> jobject {
     let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
     let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::position_wrt_parent(this, pos), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+    object_to_jobject(env, ColliderBuilder::position_wrt_parent(this, pos.into()), "com/dimforge/rapier3d/ColliderBuilder".to_string())
 }
 
 #[no_mangle]
@@ -2611,11 +3004,11 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_del
     mut env: *mut jni::JNIEnv<'local>,
     class: jni::objects::JClass<'local>,
     this: jlong,
-    delta: Isometry<f32>
+    delta: Vector3
 ) -> jobject {
     let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
     let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::delta(this, delta), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+    object_to_jobject(env, ColliderBuilder::delta(this, delta.into()), "com/dimforge/rapier3d/ColliderBuilder".to_string())
 }
 
 #[no_mangle]
@@ -2676,290 +3069,6 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_clo
 ) -> jobject {
     let this: &mut ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
     object_to_jobject(env, ColliderBuilder::clone_from(this, other), "com/dimforge/rapier3d/ColliderBuilder".to_string())
-}
-
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Isometry_jni_from_parts<'local, T>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    translation: Translation<T>,
-    rotation: Unit<Quaternion<T>>
-) -> jobject where
-    T: Scalar + RealField,
- {
-    object_to_jobject(env, Isometry::from_parts(translation, rotation), "com/dimforge/rapier3d/Isometry".to_string())
-}
-
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Isometry_jni_inverse<'local, T>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject where
-    T: Scalar + RealField,
- {
-    let this: &Isometry<T> = jlong_to_pointer::<Isometry<T>>(this).as_mut().unwrap();
-    object_to_jobject(env, Isometry::inverse(this), "com/dimforge/rapier3d/Isometry".to_string())
-}
-
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Isometry_jni_inv_mul<'local, T>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    rhs: &Isometry<T>
-) -> jobject where
-    T: Scalar + RealField,
- {
-    let this: &Isometry<T> = jlong_to_pointer::<Isometry<T>>(this).as_mut().unwrap();
-    object_to_jobject(env, Isometry::inv_mul(this, rhs), "com/dimforge/rapier3d/Isometry".to_string())
-}
-
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Isometry_jni_transform_point<'local, T>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    pt: &OPoint3<T>
-) -> jobject where
-    T: Scalar + RealField,
- {
-    let this: &Isometry<T> = jlong_to_pointer::<Isometry<T>>(this).as_mut().unwrap();
-    object_to_jobject(env, Isometry::transform_point(this, pt), "com/dimforge/rapier3d/Isometry".to_string())
-}
-
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Isometry_jni_transform_vector<'local, T>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    v: &Matrix3<T>
-) -> jobject where
-    T: Scalar + RealField,
- {
-    let this: &Isometry<T> = jlong_to_pointer::<Isometry<T>>(this).as_mut().unwrap();
-    object_to_jobject(env, Isometry::transform_vector(this, v), "com/dimforge/rapier3d/Isometry".to_string())
-}
-
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Isometry_jni_inverse_transform_point<'local, T>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    pt: &OPoint3<T>
-) -> jobject where
-    T: Scalar + RealField,
- {
-    let this: &Isometry<T> = jlong_to_pointer::<Isometry<T>>(this).as_mut().unwrap();
-    object_to_jobject(env, Isometry::inverse_transform_point(this, pt), "com/dimforge/rapier3d/Isometry".to_string())
-}
-
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Isometry_jni_inverse_transform_vector<'local, T>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    v: &Matrix3<T>
-) -> jobject where
-    T: Scalar + RealField,
- {
-    let this: &Isometry<T> = jlong_to_pointer::<Isometry<T>>(this).as_mut().unwrap();
-    object_to_jobject(env, Isometry::inverse_transform_vector(this, v), "com/dimforge/rapier3d/Isometry".to_string())
-}
-
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Isometry_jni_inverse_transform_unit_vector<'local, T>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    v: &Unit<Matrix3<T>>
-) -> jobject where
-    T: Scalar + RealField,
- {
-    let this: &Isometry<T> = jlong_to_pointer::<Isometry<T>>(this).as_mut().unwrap();
-    object_to_jobject(env, Isometry::inverse_transform_unit_vector(this, v), "com/dimforge/rapier3d/Isometry".to_string())
-}
-
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Isometry_jni_inverse_mut<'local, T>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject where
-    T: Scalar + RealField,
- {
-    let this: &mut Isometry<T> = jlong_to_pointer::<Isometry<T>>(this).as_mut().unwrap();
-    object_to_jobject(env, Isometry::inverse_mut(this), "com/dimforge/rapier3d/Isometry".to_string())
-}
-
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Isometry_jni_append_translation_mut<'local, T>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    t: &Translation<T>
-) -> jobject where
-    T: Scalar + RealField,
- {
-    let this: &mut Isometry<T> = jlong_to_pointer::<Isometry<T>>(this).as_mut().unwrap();
-    object_to_jobject(env, Isometry::append_translation_mut(this, t), "com/dimforge/rapier3d/Isometry".to_string())
-}
-
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Isometry_jni_append_rotation_mut<'local, T>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    r: &Unit<Quaternion<T>>
-) -> jobject where
-    T: Scalar + RealField,
- {
-    let this: &mut Isometry<T> = jlong_to_pointer::<Isometry<T>>(this).as_mut().unwrap();
-    object_to_jobject(env, Isometry::append_rotation_mut(this, r), "com/dimforge/rapier3d/Isometry".to_string())
-}
-
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Isometry_jni_append_rotation_wrt_point_mut<'local, T>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    r: &Unit<Quaternion<T>>,
-    p: &OPoint3<T>
-) -> jobject where
-    T: Scalar + RealField,
- {
-    let this: &mut Isometry<T> = jlong_to_pointer::<Isometry<T>>(this).as_mut().unwrap();
-    object_to_jobject(env, Isometry::append_rotation_wrt_point_mut(this, r, p), "com/dimforge/rapier3d/Isometry".to_string())
-}
-
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Isometry_jni_append_rotation_wrt_center_mut<'local, T>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    r: &Unit<Quaternion<T>>
-) -> jobject where
-    T: Scalar + RealField,
- {
-    let this: &mut Isometry<T> = jlong_to_pointer::<Isometry<T>>(this).as_mut().unwrap();
-    object_to_jobject(env, Isometry::append_rotation_wrt_center_mut(this, r), "com/dimforge/rapier3d/Isometry".to_string())
 }
 
 #[no_mangle]

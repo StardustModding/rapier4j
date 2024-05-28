@@ -1,10 +1,11 @@
 pub mod patches;
 pub mod tuple;
 pub mod util;
+pub mod wrappers;
 
 use nalgebra::{
-    ArrayStorage, Const, Matrix, OPoint, Quaternion, RealField, Scalar,
-    Translation as RTranslation, Unit,
+    ArrayStorage, Const, Matrix, Normed, OPoint, Quaternion, RealField, Scalar,
+    SimdRealField, Translation as RTranslation, Unit,
 };
 use parry3d::transformation::vhacd::VHACDParameters;
 use patches::*;
@@ -14,6 +15,7 @@ use rapier3d::prelude::{
     SharedShape, TriMeshFlags, Vector,
 };
 use tuple::*;
+use wrappers::*;
 
 pub type Optional<T> = Option<T>;
 pub type List<T> = Vec<T>;
