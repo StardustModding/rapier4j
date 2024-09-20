@@ -1,7 +1,7 @@
 use std::ops::{AddAssign, SubAssign};
 
-use nalgebra::{Isometry, Isometry3, Unit, Vector3 as NVector3};
-use parry3d::math::{AngVector, Point};
+use nalgebra::{Isometry3, Unit, Vector3 as NVector3};
+use parry3d::math::Point;
 
 #[derive(Debug, Clone, Copy, Default, PartialEq, PartialOrd)]
 pub struct Vector3 {

@@ -1,7 +1,7 @@
 use nalgebra::{Normed, RealField, Unit};
 use rapier3d::{
     geometry::{ActiveCollisionTypes, ColliderBuilder, SharedShape, TriMeshFlags},
-    math::{Isometry, Point},
+    math::Isometry,
     parry::transformation::vhacd::VHACDParameters,
     pipeline::{ActiveEvents, ActiveHooks},
 };
@@ -29,14 +29,14 @@ impl ColliderBuilderCustom {
         indices: Option<Vec<Tuple<u32, u32>>>,
     ) -> ColliderBuilder {
         ColliderBuilder::polyline(
-            vertices.iter().map(|v| v.into()).collect(),
+            vertices.iter().map(|v| (*v).into()).collect(),
             indices.map(|v| v.iter().map(|v| v.as_slice()).collect()),
         )
     }
 
     pub fn trimesh(vertices: Vec<Vector3>, indices: Vec<Triple<u32, u32, u32>>) -> ColliderBuilder {
         ColliderBuilder::trimesh(
-            vertices.iter().map(|v| v.into()).collect(),
+            vertices.iter().map(|v| (*v).into()).collect(),
             indices.iter().map(|v| v.as_slice()).collect(),
         )
     }
@@ -47,7 +47,7 @@ impl ColliderBuilderCustom {
         flags: TriMeshFlags,
     ) -> ColliderBuilder {
         ColliderBuilder::trimesh_with_flags(
-            vertices.iter().map(|v| v.into()).collect(),
+            vertices.iter().map(|v| (*v).into()).collect(),
             indices
                 .iter()
                 .map(|v| v.as_slice())
@@ -61,7 +61,11 @@ impl ColliderBuilderCustom {
         indices: Vec<Triple<u32, u32, u32>>,
     ) -> ColliderBuilder {
         ColliderBuilder::convex_decomposition(
-            vertices.iter().map(|v| v.into()).collect().as_slice(),
+            vertices
+                .iter()
+                .map(|v| (*v).into())
+                .collect::<Vec<_>>()
+                .as_slice(),
             indices
                 .iter()
                 .map(|v| v.as_slice())
@@ -76,7 +80,11 @@ impl ColliderBuilderCustom {
         border_radius: f32,
     ) -> ColliderBuilder {
         ColliderBuilder::round_convex_decomposition(
-            vertices.iter().map(|v| v.into()).collect().as_slice(),
+            vertices
+                .iter()
+                .map(|v| (*v).into())
+                .collect::<Vec<_>>()
+                .as_slice(),
             indices
                 .iter()
                 .map(|v| v.as_slice())
@@ -92,7 +100,11 @@ impl ColliderBuilderCustom {
         params: &VHACDParameters,
     ) -> ColliderBuilder {
         ColliderBuilder::convex_decomposition_with_params(
-            vertices.iter().map(|v| v.into()).collect().as_slice(),
+            vertices
+                .iter()
+                .map(|v| (*v).into())
+                .collect::<Vec<_>>()
+                .as_slice(),
             indices
                 .iter()
                 .map(|v| v.as_slice())
@@ -109,7 +121,11 @@ impl ColliderBuilderCustom {
         border_radius: f32,
     ) -> ColliderBuilder {
         ColliderBuilder::round_convex_decomposition_with_params(
-            vertices.iter().map(|v| v.into()).collect().as_slice(),
+            vertices
+                .iter()
+                .map(|v| (*v).into())
+                .collect::<Vec<_>>()
+                .as_slice(),
             indices
                 .iter()
                 .map(|v| v.as_slice())
@@ -121,12 +137,22 @@ impl ColliderBuilderCustom {
     }
 
     pub fn convex_hull(points: Vec<Vector3>) -> Option<ColliderBuilder> {
-        ColliderBuilder::convex_hull(points.iter().map(|v| v.into()).collect().as_slice())
+        ColliderBuilder::convex_hull(
+            points
+                .iter()
+                .map(|v| (*v).into())
+                .collect::<Vec<_>>()
+                .as_slice(),
+        )
     }
 
     pub fn round_convex_hull(points: Vec<Vector3>, border_radius: f32) -> Option<ColliderBuilder> {
         ColliderBuilder::round_convex_hull(
-            points.iter().map(|v| v.into()).collect().as_slice(),
+            points
+                .iter()
+                .map(|v| (*v).into())
+                .collect::<Vec<_>>()
+                .as_slice(),
             border_radius,
         )
     }
@@ -136,7 +162,7 @@ impl ColliderBuilderCustom {
         indices: Vec<Triple<u32, u32, u32>>,
     ) -> Option<ColliderBuilder> {
         ColliderBuilder::convex_mesh(
-            points.iter().map(|v| v.into()).collect(),
+            points.iter().map(|v| (*v).into()).collect(),
             indices
                 .iter()
                 .map(|v| v.as_slice())
@@ -151,7 +177,7 @@ impl ColliderBuilderCustom {
         border_radius: f32,
     ) -> Option<ColliderBuilder> {
         ColliderBuilder::round_convex_mesh(
-            points.iter().map(|v| v.into()).collect(),
+            points.iter().map(|v| (*v).into()).collect(),
             indices
                 .iter()
                 .map(|v| v.as_slice())

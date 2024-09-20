@@ -3,16 +3,13 @@ pub mod tuple;
 pub mod util;
 pub mod wrappers;
 
-use nalgebra::{
-    ArrayStorage, Const, Matrix, Normed, OPoint, Quaternion, RealField, Scalar,
-    SimdRealField, Translation as RTranslation, Unit,
-};
+use nalgebra::{ArrayStorage, Const, Matrix, OPoint, Translation as RTranslation};
 use parry3d::transformation::vhacd::VHACDParameters;
 use patches::*;
 use rapier3d::prelude::{
     ActiveCollisionTypes, ActiveEvents, ActiveHooks, AngVector, CoefficientCombineRule, Collider,
-    ColliderBuilder, DMatrix, InteractionGroups, Isometry, MassProperties, Point, Rotation,
-    SharedShape, TriMeshFlags, Vector,
+    ColliderBuilder, DMatrix, InteractionGroups, Isometry, MassProperties, Rotation, SharedShape,
+    TriMeshFlags, Vector,
 };
 use tuple::*;
 use wrappers::*;
