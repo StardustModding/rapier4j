@@ -207,6 +207,26 @@ impl IntoJavaType for RustTypes {
     no_mangle_generic_items,
     deprecated,
 )]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_of<'local>(
+    mut env: *mut jni::JNIEnv<'local>,
+    class: jni::objects::JClass<'local>,
+    x: f32,
+    y: f32,
+    z: f32
+) -> jobject {
+    object_to_jobject(env, Vector3::new(x, y, z), "com/dimforge/rapier3d/Vector3".to_string())
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+)]
 pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_create<'local>(
     mut env: *mut jni::JNIEnv<'local>,
     class: jni::objects::JClass<'local>

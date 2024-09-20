@@ -1,5 +1,5 @@
 class Vector3 {
-    // [new] static fn of(x: f32, y: f32, z: f32) -> Vector3;
+    [new] static fn of(x: f32, y: f32, z: f32) -> Vector3;
     [default] static fn create() -> Vector3;
 
     fn x() -> f32;
