@@ -2,7 +2,10 @@ class Tuple<A, B> {
     bound A: Clone;
     bound B: Clone;
 
-    static fn of(first: A, second: B) -> Tuple<A, B>;
+    [rust] field a: A;
+    [rust] field b: B;
+
+    static init fn of(first: A, second: B) -> Tuple<A, B>;
     
     fn first() -> A;
     fn second() -> B;

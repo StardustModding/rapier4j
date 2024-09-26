@@ -1,202 +1,428 @@
+use rs4j::prelude::*;
 
-#[allow(unused_imports)]
-use jni::sys::{
-    jarray, jboolean, jbyte, jchar, jclass, jdouble, jfloat, jint, jlong, jobject, jshort, jstring,
-    jvalue,
-};
-
-use jni::{
-    objects::{JObject, JValueGen},
-    JNIEnv,
-};
-
-/// Convert a [`jlong`] to a `*mut T`
-#[cfg(target_pointer_width = "32")]
-pub unsafe fn jlong_to_pointer<T>(val: jlong) -> *mut T {
-    (val as u32) as *mut T
+#[allow(non_camel_case_types)]
+pub struct __JNI_Vector3 {
+    pub inner: *mut NVector3<f32>,
 }
 
-/// Convert a [`jlong`] to a `*mut T`
-#[cfg(target_pointer_width = "64")]
-pub unsafe fn jlong_to_pointer<T>(val: jlong) -> *mut T {
-    val as *mut T
-}
-
-/// Convert an object (`T`) to a [`jobject`]
-#[allow(dead_code)]
-pub fn object_to_jobject<T>(env: *mut JNIEnv, obj: T, jcls: String) -> jobject {
-    let jobj: JObject = unsafe { (*env).alloc_object(jcls).unwrap() };
-
-    assert!(!jobj.is_null(), "object_to_jobject: AllocObject failed");
-
-    let ret: jlong = Box::into_raw(Box::new(obj)) as jlong;
-
-    unsafe {
-        let res = (*env).set_field(&jobj, "__pointer", "Long", JValueGen::Long(ret));
-
-        if (*env).exception_check().unwrap() || res.is_err() {
-            panic!("object_to_jobject: Can not set mNativeObj field: catch exception");
+impl __JNI_Vector3 {
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn to_rust(&self) -> Vector3 {
+        Vector3 {
+            inner: (&mut *self.inner).clone(),
         }
     }
 
-    jobj.as_raw()
-}
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_new(x: f32, y: f32, z: f32) -> Self {
+        let base = Vector3::new(x, y, z);
 
-
-
-/// A trait for things that can be converted into Java types.
-pub trait IntoJavaType {
-    /// Convert this into a [`String`] (java type)
-    fn into_java_type(&self) -> String;
-}
-
-macro_rules! from_type {
-    ($ty: ident, $name: ident) => {
-        impl From<$ty> for RustTypes {
-            fn from(val: $ty) -> RustTypes {
-                RustTypes::$name(val)
-            }
+        Self {
+            inner: Box::leak(Box::new(base.inner)) as *mut NVector3<f32>,
         }
+    }
 
-        impl Into<$ty> for RustTypes {
-            fn into(self) -> $ty {
-                if let Self::$name(val) = self {
-                    val
-                } else {
-                    panic!("Expected RustTypes::{}, got {:?}", stringify!($name), self)
-                }
-            }
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_default() -> Self {
+        let base = Vector3::default();
+
+        Self {
+            inner: Box::leak(Box::new(base.inner)) as *mut NVector3<f32>,
         }
-    };
-}
+    }
 
-/// An enum for Rust types.
-#[derive(Debug, Clone, PartialEq, PartialOrd, Default)]
-pub enum RustTypes {
-    /// A [`String`].
-    String(String),
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_x(&self, ) -> f32 {
+        Vector3::x(&self.to_rust()).clone()
+    }
 
-    /// A [`bool`].
-    Bool(bool),
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_y(&self, ) -> f32 {
+        Vector3::y(&self.to_rust()).clone()
+    }
 
-    /// A [`u8`].
-    Uint8(u8),
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_z(&self, ) -> f32 {
+        Vector3::z(&self.to_rust()).clone()
+    }
 
-    /// A [`u16`].
-    Uint16(u16),
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_add(&mut self, other: Vector3) -> Vector3 {
+        Vector3::add(&mut self.to_rust(), other).clone()
+    }
 
-    /// A [`u32`].
-    Uint32(u32),
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_sub(&mut self, other: Vector3) -> Vector3 {
+        Vector3::sub(&mut self.to_rust(), other).clone()
+    }
 
-    /// A [`u64`].
-    Uint64(u64),
-
-    /// A [`u128`].
-    Uint128(u128),
-
-    /// An [`i8`].
-    Int8(i8),
-
-    /// An [`i16`].
-    Int16(i16),
-
-    /// An [`i32`].
-    Int32(i32),
-
-    /// An [`i64`].
-    Int64(i64),
-
-    /// An [`i128`].
-    Int128(i128),
-
-    /// A [`f32`].
-    Float32(f32),
-
-    /// A [`f64`].
-    Float64(f64),
-
-    /// A catch-all, with the type name as a [`String`].
-    Other(String),
-
-    /// A void type ([`unit`](https://doc.rust-lang.org/std/primitive.unit.html)).
-    #[default]
-    Void,
-}
-
-from_type!(String, String);
-from_type!(bool, Bool);
-from_type!(u8, Uint8);
-from_type!(u16, Uint16);
-from_type!(u32, Uint32);
-from_type!(u64, Uint64);
-from_type!(u128, Uint128);
-from_type!(i8, Int8);
-from_type!(i16, Int16);
-from_type!(i32, Int32);
-from_type!(i64, Int64);
-from_type!(i128, Int128);
-from_type!(f32, Float32);
-from_type!(f64, Float64);
-
-impl From<&str> for RustTypes {
-    fn from(val: &str) -> Self {
-        match val {
-            "String" | "str" => Self::String(String::new()),
-            "bool" => Self::Bool(false),
-            "i8" => Self::Int8(0),
-            "i16" => Self::Int16(0),
-            "i32" => Self::Int32(0),
-            "i64" => Self::Int64(0),
-            "i128" => Self::Int128(0),
-            "u8" => Self::Uint8(0),
-            "u16" => Self::Uint16(0),
-            "u32" => Self::Uint32(0),
-            "u64" => Self::Uint64(0),
-            "u128" => Self::Uint128(0),
-            "f32" => Self::Float32(0.0),
-            "f64" => Self::Float64(0.0),
-            v => Self::Other(v.to_string()),
-        }
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_clone(&self, ) -> Vector3 {
+        Vector3::clone(&self.to_rust()).clone()
     }
 }
 
-impl From<()> for RustTypes {
-    fn from(_: ()) -> Self {
-        Self::Void
-    }
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+    missing_docs,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_1init_1new<'local, >(mut env: JNIEnv<'local>, obj: JObject<'local>, x: jfloat, y: jfloat, z: jfloat) -> jlong {
+    
+    let it = __JNI_Vector3::__wrapped_new(x, y, z);
+    (Box::leak(Box::new(it)) as *mut __JNI_Vector3) as jlong
 }
 
-impl Into<()> for RustTypes {
-    fn into(self) -> () {
-        if let Self::Void = self {
-            ()
-        } else {
-            panic!("Expected RustTypes::Void, got {:?}", self)
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+    missing_docs,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_1init_1default<'local, >(mut env: JNIEnv<'local>, obj: JObject<'local>, ) -> jlong {
+    
+    let it = __JNI_Vector3::__wrapped_default();
+    (Box::leak(Box::new(it)) as *mut __JNI_Vector3) as jlong
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+    missing_docs,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_1x<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jfloat {
+    let it = &*(ptr as *mut __JNI_Vector3);
+
+    it.__wrapped_x()
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+    missing_docs,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_1y<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jfloat {
+    let it = &*(ptr as *mut __JNI_Vector3);
+
+    it.__wrapped_y()
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+    missing_docs,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_1z<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jfloat {
+    let it = &*(ptr as *mut __JNI_Vector3);
+
+    it.__wrapped_z()
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+    missing_docs,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_1add<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, other: jlong) -> jlong {
+    let it = &mut *(ptr as *mut __JNI_Vector3);
+    let other = &*(other as *mut Vector3);
+
+    let val = it.__wrapped_add(other.clone());
+    (Box::leak(Box::new(val)) as *mut Vector3) as jlong
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+    missing_docs,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_1sub<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, other: jlong) -> jlong {
+    let it = &mut *(ptr as *mut __JNI_Vector3);
+    let other = &*(other as *mut Vector3);
+
+    let val = it.__wrapped_sub(other.clone());
+    (Box::leak(Box::new(val)) as *mut Vector3) as jlong
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+    missing_docs,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_1clone<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    let it = &*(ptr as *mut __JNI_Vector3);
+
+    let val = it.__wrapped_clone();
+    (Box::leak(Box::new(val)) as *mut Vector3) as jlong
+}
+
+#[no_mangle]
+#[allow(
+    unused_mut,
+    unused_variables,
+    unused_unsafe,
+    non_snake_case,
+    improper_ctypes_definitions,
+    no_mangle_generic_items,
+    deprecated,
+    missing_docs,
+)]
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_1free<'local, >(_env: JNIEnv<'local>, _class: JClass<'local>, ptr: jlong) {
+    let it = Box::from_raw(ptr as *mut __JNI_Vector3);
+    let _ = Box::from_raw(it.inner);
+}
+
+#[allow(non_camel_case_types)]
+pub struct __JNI_ActiveEvents {
+    pub __inner: ActiveEvents,
+}
+
+impl __JNI_ActiveEvents {
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn to_rust(&self) -> ActiveEvents {
+        self.__inner.clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_empty() -> ActiveEvents {
+        ActiveEvents::empty()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_all() -> ActiveEvents {
+        ActiveEvents::all()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_default() -> Self {
+        let base = ActiveEvents::default();
+
+        Self {
+            __inner: base,
         }
     }
-}
 
-impl IntoJavaType for RustTypes {
-    fn into_java_type(&self) -> String {
-        match self.clone() {
-            Self::String(_) => "String".to_string(),
-            Self::Bool(_) => "Boolean".to_string(),
-            Self::Uint8(_) | Self::Int8(_) => "Byte".to_string(),
-            Self::Uint16(_) | Self::Int16(_) => "Short".to_string(),
-            Self::Uint32(_) | Self::Int32(_) => "Integer".to_string(),
-            Self::Uint64(_) | Self::Int64(_) => "Long".to_string(),
-            Self::Uint128(_) | Self::Int128(_) => "java.math.BigInteger".to_string(),
-            Self::Float32(_) => "Float".to_string(),
-            Self::Float64(_) => "Double".to_string(),
-            Self::Other(val) => val,
-            Self::Void => "Void".to_string(),
-        }
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_of(bits: u32) -> Option<ActiveEvents> {
+        ActiveEvents::from_bits(bits)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_collision_events() -> u32 {
+        BitflagsHelper::active_events_collison_events()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_contact_force_events() -> u32 {
+        BitflagsHelper::active_events_contact_force_events()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_valueOf(&self, ) -> u32 {
+        ActiveEvents::bits(&self.to_rust()).clone()
     }
 }
 
-
-
-
 #[no_mangle]
 #[allow(
     unused_mut,
@@ -206,32 +432,13 @@ impl IntoJavaType for RustTypes {
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_of<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    x: f32,
-    y: f32,
-    z: f32
-) -> jobject {
-    object_to_jobject(env, Vector3::new(x, y, z), "com/dimforge/rapier3d/Vector3".to_string())
-}
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveEvents_jni_1empty<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_create<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>
-) -> jobject {
-    object_to_jobject(env, Vector3::default(), "com/dimforge/rapier3d/Vector3".to_string())
+    let val = __JNI_ActiveEvents::__wrapped_empty();
+    (Box::leak(Box::new(val)) as *mut ActiveEvents) as jlong
 }
 
 #[no_mangle]
@@ -243,33 +450,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_create<'loc
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_x<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Vector3 = jlong_to_pointer::<Vector3>(this).as_mut().unwrap();
-    object_to_jobject(env, Vector3::x(this), "com/dimforge/rapier3d/Vector3".to_string())
-}
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveEvents_jni_1all<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_y<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Vector3 = jlong_to_pointer::<Vector3>(this).as_mut().unwrap();
-    object_to_jobject(env, Vector3::y(this), "com/dimforge/rapier3d/Vector3".to_string())
+    let val = __JNI_ActiveEvents::__wrapped_all();
+    (Box::leak(Box::new(val)) as *mut ActiveEvents) as jlong
 }
 
 #[no_mangle]
@@ -281,14 +468,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_y<'local>(
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_z<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Vector3 = jlong_to_pointer::<Vector3>(this).as_mut().unwrap();
-    object_to_jobject(env, Vector3::z(this), "com/dimforge/rapier3d/Vector3".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveEvents_jni_1init_1default<'local, >(mut env: JNIEnv<'local>, obj: JObject<'local>, ) -> jlong {
+    
+    let it = __JNI_ActiveEvents::__wrapped_default();
+    (Box::leak(Box::new(it)) as *mut __JNI_ActiveEvents) as jlong
 }
 
 #[no_mangle]
@@ -300,35 +485,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_z<'local>(
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_add<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    other: Vector3
-) -> jobject {
-    let this: &mut Vector3 = jlong_to_pointer::<Vector3>(this).as_mut().unwrap();
-    object_to_jobject(env, Vector3::add(this, other), "com/dimforge/rapier3d/Vector3".to_string())
-}
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveEvents_jni_1of<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, bits: jint) -> jlong {
+    
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_sub<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    other: Vector3
-) -> jobject {
-    let this: &mut Vector3 = jlong_to_pointer::<Vector3>(this).as_mut().unwrap();
-    object_to_jobject(env, Vector3::sub(this, other), "com/dimforge/rapier3d/Vector3".to_string())
+    let val = __JNI_ActiveEvents::__wrapped_of(bits as u32).unwrap_or_default();
+    (Box::leak(Box::new(val)) as *mut ActiveEvents) as jlong
 }
 
 #[no_mangle]
@@ -340,31 +503,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_sub<'local>
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Vector3_jni_clone<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Vector3 = jlong_to_pointer::<Vector3>(this).as_mut().unwrap();
-    object_to_jobject(env, Vector3::clone(this), "com/dimforge/rapier3d/Vector3".to_string())
-}
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveEvents_jni_1collision_1events<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jint {
+    
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveCollisionTypes_jni_empty<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>
-) -> jobject {
-    object_to_jobject(env, ActiveCollisionTypes::empty(), "com/dimforge/rapier3d/ActiveCollisionTypes".to_string())
+    __JNI_ActiveEvents::__wrapped_collision_events() as i32
 }
 
 #[no_mangle]
@@ -376,29 +520,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveCollisionTypes_jn
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveCollisionTypes_jni_all<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>
-) -> jobject {
-    object_to_jobject(env, ActiveCollisionTypes::all(), "com/dimforge/rapier3d/ActiveCollisionTypes".to_string())
-}
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveEvents_jni_1contact_1force_1events<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jint {
+    
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveCollisionTypes_jni_create<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>
-) -> jobject {
-    object_to_jobject(env, ActiveCollisionTypes::default(), "com/dimforge/rapier3d/ActiveCollisionTypes".to_string())
+    __JNI_ActiveEvents::__wrapped_contact_force_events() as i32
 }
 
 #[no_mangle]
@@ -410,29 +537,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveCollisionTypes_jn
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveCollisionTypes_jni_dynamic_dynamic<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>
-) -> jobject {
-    object_to_jobject(env, BitflagsHelper::active_collision_types_dynamic_dynamic(), "com/dimforge/rapier3d/ActiveCollisionTypes".to_string())
-}
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveEvents_jni_1valueOf<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jint {
+    let it = &*(ptr as *mut __JNI_ActiveEvents);
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveCollisionTypes_jni_dynamic_kinematic<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>
-) -> jobject {
-    object_to_jobject(env, BitflagsHelper::active_collision_types_dynamic_kinematic(), "com/dimforge/rapier3d/ActiveCollisionTypes".to_string())
+    it.__wrapped_valueOf() as i32
 }
 
 #[no_mangle]
@@ -444,151 +554,144 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveCollisionTypes_jn
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveCollisionTypes_jni_dynamic_fixed<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>
-) -> jobject {
-    object_to_jobject(env, BitflagsHelper::active_collision_types_dynamic_fixed(), "com/dimforge/rapier3d/ActiveCollisionTypes".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveEvents_jni_1free<'local, >(_env: JNIEnv<'local>, _class: JClass<'local>, ptr: jlong) {
+    let it = Box::from_raw(ptr as *mut __JNI_ActiveEvents);
+    
 }
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveCollisionTypes_jni_kinematic_kinematic<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>
-) -> jobject {
-    object_to_jobject(env, BitflagsHelper::active_collision_types_kinematic_kinematic(), "com/dimforge/rapier3d/ActiveCollisionTypes".to_string())
+#[allow(non_camel_case_types)]
+pub struct __JNI_ActiveHooks {
+    pub __inner: ActiveHooks,
 }
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveCollisionTypes_jni_kinematic_fixed<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>
-) -> jobject {
-    object_to_jobject(env, BitflagsHelper::active_collision_types_kinematic_fixed(), "com/dimforge/rapier3d/ActiveCollisionTypes".to_string())
-}
+impl __JNI_ActiveHooks {
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn to_rust(&self) -> ActiveHooks {
+        self.__inner.clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_empty() -> ActiveHooks {
+        ActiveHooks::empty()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_all() -> ActiveHooks {
+        ActiveHooks::all()
+    }
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveCollisionTypes_jni_fixed_fixed<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>
-) -> jobject {
-    object_to_jobject(env, BitflagsHelper::active_collision_types_fixed_fixed(), "com/dimforge/rapier3d/ActiveCollisionTypes".to_string())
-}
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_create() -> ActiveHooks {
+        ActiveHooks::default()
+    }
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveCollisionTypes_jni_of<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    bits: u16
-) -> jobject {
-    object_to_jobject(env, ActiveCollisionTypes::from_bits(bits), "com/dimforge/rapier3d/ActiveCollisionTypes".to_string())
-}
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_filter_contact_pairs() -> u32 {
+        BitflagsHelper::active_hooks_filter_contact_pairs()
+    }
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveCollisionTypes_jni_valueOf<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &ActiveCollisionTypes = jlong_to_pointer::<ActiveCollisionTypes>(this).as_mut().unwrap();
-    object_to_jobject(env, ActiveCollisionTypes::bits(this), "com/dimforge/rapier3d/ActiveCollisionTypes".to_string())
-}
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_filter_intersection_pair() -> u32 {
+        BitflagsHelper::active_hooks_filter_intersection_pair()
+    }
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveEvents_jni_empty<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>
-) -> jobject {
-    object_to_jobject(env, ActiveEvents::empty(), "com/dimforge/rapier3d/ActiveEvents".to_string())
-}
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_modify_solver_contacts() -> u32 {
+        BitflagsHelper::active_hooks_modify_solver_contacts()
+    }
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveEvents_jni_all<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>
-) -> jobject {
-    object_to_jobject(env, ActiveEvents::all(), "com/dimforge/rapier3d/ActiveEvents".to_string())
-}
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_of(bits: u32) -> Option<ActiveHooks> {
+        ActiveHooks::from_bits(bits)
+    }
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveEvents_jni_create<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>
-) -> jobject {
-    object_to_jobject(env, ActiveEvents::default(), "com/dimforge/rapier3d/ActiveEvents".to_string())
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_valueOf(&self, ) -> u32 {
+        ActiveHooks::bits(&self.to_rust()).clone()
+    }
 }
 
 #[no_mangle]
@@ -600,29 +703,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveEvents_jni_create
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveEvents_jni_collision_events<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>
-) -> jobject {
-    object_to_jobject(env, BitflagsHelper::active_events_collison_events(), "com/dimforge/rapier3d/ActiveEvents".to_string())
-}
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveHooks_jni_1empty<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveEvents_jni_contact_force_events<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>
-) -> jobject {
-    object_to_jobject(env, BitflagsHelper::active_events_contact_force_events(), "com/dimforge/rapier3d/ActiveEvents".to_string())
+    let val = __JNI_ActiveHooks::__wrapped_empty();
+    (Box::leak(Box::new(val)) as *mut ActiveHooks) as jlong
 }
 
 #[no_mangle]
@@ -634,32 +721,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveEvents_jni_contac
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveEvents_jni_of<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    bits: u32
-) -> jobject {
-    object_to_jobject(env, ActiveEvents::from_bits(bits), "com/dimforge/rapier3d/ActiveEvents".to_string())
-}
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveHooks_jni_1all<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveEvents_jni_valueOf<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &ActiveEvents = jlong_to_pointer::<ActiveEvents>(this).as_mut().unwrap();
-    object_to_jobject(env, ActiveEvents::bits(this), "com/dimforge/rapier3d/ActiveEvents".to_string())
+    let val = __JNI_ActiveHooks::__wrapped_all();
+    (Box::leak(Box::new(val)) as *mut ActiveHooks) as jlong
 }
 
 #[no_mangle]
@@ -671,29 +739,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveEvents_jni_valueO
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveHooks_jni_empty<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>
-) -> jobject {
-    object_to_jobject(env, ActiveHooks::empty(), "com/dimforge/rapier3d/ActiveHooks".to_string())
-}
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveHooks_jni_1create<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveHooks_jni_all<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>
-) -> jobject {
-    object_to_jobject(env, ActiveHooks::all(), "com/dimforge/rapier3d/ActiveHooks".to_string())
+    let val = __JNI_ActiveHooks::__wrapped_create();
+    (Box::leak(Box::new(val)) as *mut ActiveHooks) as jlong
 }
 
 #[no_mangle]
@@ -705,29 +757,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveHooks_jni_all<'lo
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveHooks_jni_create<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>
-) -> jobject {
-    object_to_jobject(env, ActiveHooks::default(), "com/dimforge/rapier3d/ActiveHooks".to_string())
-}
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveHooks_jni_1filter_1contact_1pairs<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jint {
+    
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveHooks_jni_filter_contact_pairs<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>
-) -> jobject {
-    object_to_jobject(env, BitflagsHelper::active_hooks_filter_contact_pairs(), "com/dimforge/rapier3d/ActiveHooks".to_string())
+    __JNI_ActiveHooks::__wrapped_filter_contact_pairs() as i32
 }
 
 #[no_mangle]
@@ -739,12 +774,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveHooks_jni_filter_
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveHooks_jni_filter_intersection_pair<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>
-) -> jobject {
-    object_to_jobject(env, BitflagsHelper::active_hooks_filter_intersection_pair(), "com/dimforge/rapier3d/ActiveHooks".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveHooks_jni_1filter_1intersection_1pair<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jint {
+    
+
+    __JNI_ActiveHooks::__wrapped_filter_intersection_pair() as i32
 }
 
 #[no_mangle]
@@ -756,12 +791,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveHooks_jni_filter_
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveHooks_jni_modify_solver_contacts<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>
-) -> jobject {
-    object_to_jobject(env, BitflagsHelper::active_hooks_modify_solver_contacts(), "com/dimforge/rapier3d/ActiveHooks".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveHooks_jni_1modify_1solver_1contacts<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jint {
+    
+
+    __JNI_ActiveHooks::__wrapped_modify_solver_contacts() as i32
 }
 
 #[no_mangle]
@@ -773,13 +808,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveHooks_jni_modify_
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveHooks_jni_of<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    bits: u32
-) -> jobject {
-    object_to_jobject(env, ActiveHooks::from_bits(bits), "com/dimforge/rapier3d/ActiveHooks".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveHooks_jni_1of<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, bits: jint) -> jlong {
+    
+
+    let val = __JNI_ActiveHooks::__wrapped_of(bits as u32).unwrap_or_default();
+    (Box::leak(Box::new(val)) as *mut ActiveHooks) as jlong
 }
 
 #[no_mangle]
@@ -791,14 +826,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveHooks_jni_of<'loc
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveHooks_jni_valueOf<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &ActiveHooks = jlong_to_pointer::<ActiveHooks>(this).as_mut().unwrap();
-    object_to_jobject(env, ActiveHooks::bits(this), "com/dimforge/rapier3d/ActiveHooks".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveHooks_jni_1valueOf<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jint {
+    let it = &*(ptr as *mut __JNI_ActiveHooks);
+
+    it.__wrapped_valueOf() as i32
 }
 
 #[no_mangle]
@@ -810,52 +843,704 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveHooks_jni_valueOf
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_is_enabled<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::is_enabled(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ActiveHooks_jni_1free<'local, >(_env: JNIEnv<'local>, _class: JClass<'local>, ptr: jlong) {
+    let it = Box::from_raw(ptr as *mut __JNI_ActiveHooks);
+    
 }
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_is_sensor<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::is_sensor(this), "com/dimforge/rapier3d/Collider".to_string())
+#[allow(non_camel_case_types)]
+pub struct __JNI_Collider {
+    pub __inner: Collider,
 }
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_active_hooks<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::active_hooks(this), "com/dimforge/rapier3d/Collider".to_string())
+impl __JNI_Collider {
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn to_rust(&self) -> Collider {
+        self.__inner.clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_is_enabled(&self, ) -> bool {
+        Collider::is_enabled(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_is_sensor(&self, ) -> bool {
+        Collider::is_sensor(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_active_hooks(&self, ) -> ActiveHooks {
+        Collider::active_hooks(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_active_events(&self, ) -> ActiveEvents {
+        Collider::active_events(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_active_collision_types(&self, ) -> ActiveCollisionTypes {
+        Collider::active_collision_types(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_friction(&self, ) -> f32 {
+        Collider::friction(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_friction_combine_rule(&self, ) -> CoefficientCombineRule {
+        Collider::friction_combine_rule(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_restitution(&self, ) -> f32 {
+        Collider::restitution(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_restitution_combine_rule(&self, ) -> CoefficientCombineRule {
+        Collider::restitution_combine_rule(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_position(&self, ) -> Isometry<f32> {
+        Collider::position(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_translation(&self, ) -> Vector<f32> {
+        Collider::translation(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_rotation(&self, ) -> Rotation<f32> {
+        Collider::rotation(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_solver_groups(&self, ) -> InteractionGroups {
+        Collider::solver_groups(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_collision_groups(&self, ) -> InteractionGroups {
+        Collider::collision_groups(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_material(&self, ) -> ColliderMaterial {
+        Collider::material(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_volume(&self, ) -> f32 {
+        Collider::volume(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_density(&self, ) -> f32 {
+        Collider::density(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_mass(&self, ) -> f32 {
+        Collider::mass(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_shared_shape(&self, ) -> SharedShape {
+        Collider::shared_shape(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_compute_aabb(&self, ) -> Aabb {
+        Collider::compute_aabb(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_compute_swept_aabb(&self, next_pos: &Isometry<f32>) -> Aabb {
+        Collider::compute_swept_aabb(&self.to_rust(), next_pos).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_mass_properties(&self, ) -> MassProperties {
+        Collider::mass_properties(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_contact_force_event_threshold(&self, ) -> f32 {
+        Collider::contact_force_event_threshold(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_set_active_hooks(&mut self, active_hooks: ActiveHooks) -> () {
+        Collider::set_active_hooks(&mut self.to_rust(), active_hooks).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_set_active_events(&mut self, active_events: ActiveEvents) -> () {
+        Collider::set_active_events(&mut self.to_rust(), active_events).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_set_active_collision_types(&mut self, active_collision_types: ActiveCollisionTypes) -> () {
+        Collider::set_active_collision_types(&mut self.to_rust(), active_collision_types).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_set_friction(&mut self, coef: f32) -> () {
+        Collider::set_friction(&mut self.to_rust(), coef).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_set_friction_combine_rule(&mut self, rule: CoefficientCombineRule) -> () {
+        Collider::set_friction_combine_rule(&mut self.to_rust(), rule).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_set_restitution(&mut self, coef: f32) -> () {
+        Collider::set_restitution(&mut self.to_rust(), coef).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_set_restitution_combine_rule(&mut self, rule: CoefficientCombineRule) -> () {
+        Collider::set_restitution_combine_rule(&mut self.to_rust(), rule).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_set_contact_force_event_threshold(&mut self, threshold: f32) -> () {
+        Collider::set_contact_force_event_threshold(&mut self.to_rust(), threshold).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_set_sensor(&mut self, is_sensor: bool) -> () {
+        Collider::set_sensor(&mut self.to_rust(), is_sensor).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_set_enabled(&mut self, enabled: bool) -> () {
+        Collider::set_enabled(&mut self.to_rust(), enabled).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_set_translation(&mut self, translation: Vector<f32>) -> () {
+        Collider::set_translation(&mut self.to_rust(), translation).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_set_rotation(&mut self, rotation: Rotation<f32>) -> () {
+        Collider::set_rotation(&mut self.to_rust(), rotation).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_set_position(&mut self, position: Isometry<f32>) -> () {
+        Collider::set_position(&mut self.to_rust(), position).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_set_translation_wrt_parent(&mut self, translation: Vector<f32>) -> () {
+        Collider::set_translation_wrt_parent(&mut self.to_rust(), translation).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_set_rotation_wrt_parent(&mut self, rotation: AngVector<f32>) -> () {
+        Collider::set_rotation_wrt_parent(&mut self.to_rust(), rotation).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_set_position_wrt_parent(&mut self, pos_wrt_parent: Isometry<f32>) -> () {
+        Collider::set_position_wrt_parent(&mut self.to_rust(), pos_wrt_parent).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_set_collision_groups(&mut self, groups: InteractionGroups) -> () {
+        Collider::set_collision_groups(&mut self.to_rust(), groups).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_set_solver_groups(&mut self, groups: InteractionGroups) -> () {
+        Collider::set_solver_groups(&mut self.to_rust(), groups).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_set_density(&mut self, density: f32) -> () {
+        Collider::set_density(&mut self.to_rust(), density).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_set_mass(&mut self, mass: f32) -> () {
+        Collider::set_mass(&mut self.to_rust(), mass).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_set_mass_properties(&mut self, mass_properties: MassProperties) -> () {
+        Collider::set_mass_properties(&mut self.to_rust(), mass_properties).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_set_shape(&mut self, shape: SharedShape) -> () {
+        Collider::set_shape(&mut self.to_rust(), shape).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_parent(&self, ) -> Option<RigidBodyHandle> {
+        Collider::parent(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_clone(&self, ) -> Collider {
+        Collider::clone(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_clone_from(&mut self, other: &Collider) -> () {
+        Collider::clone_from(&mut self.to_rust(), other).clone()
+    }
 }
 
 #[no_mangle]
@@ -867,14 +1552,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_active_hoo
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_active_events<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::active_events(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1is_1enabled<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jboolean {
+    let it = &*(ptr as *mut __JNI_Collider);
+
+    it.__wrapped_is_enabled() as u8
 }
 
 #[no_mangle]
@@ -886,14 +1569,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_active_eve
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_active_collision_types<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::active_collision_types(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1is_1sensor<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jboolean {
+    let it = &*(ptr as *mut __JNI_Collider);
+
+    it.__wrapped_is_sensor() as u8
 }
 
 #[no_mangle]
@@ -905,14 +1586,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_active_col
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_friction<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::friction(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1active_1hooks<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    let it = &*(ptr as *mut __JNI_Collider);
+
+    let val = it.__wrapped_active_hooks();
+    (Box::leak(Box::new(val)) as *mut ActiveHooks) as jlong
 }
 
 #[no_mangle]
@@ -924,14 +1604,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_friction<'
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_friction_combine_rule<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::friction_combine_rule(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1active_1events<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    let it = &*(ptr as *mut __JNI_Collider);
+
+    let val = it.__wrapped_active_events();
+    (Box::leak(Box::new(val)) as *mut ActiveEvents) as jlong
 }
 
 #[no_mangle]
@@ -943,14 +1622,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_friction_c
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_restitution<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::restitution(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1active_1collision_1types<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    let it = &*(ptr as *mut __JNI_Collider);
+
+    let val = it.__wrapped_active_collision_types();
+    (Box::leak(Box::new(val)) as *mut ActiveCollisionTypes) as jlong
 }
 
 #[no_mangle]
@@ -962,14 +1640,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_restitutio
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_restitution_combine_rule<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::restitution_combine_rule(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1friction<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jfloat {
+    let it = &*(ptr as *mut __JNI_Collider);
+
+    it.__wrapped_friction()
 }
 
 #[no_mangle]
@@ -981,14 +1657,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_restitutio
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_position<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::position(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1friction_1combine_1rule<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    let it = &*(ptr as *mut __JNI_Collider);
+
+    let val = it.__wrapped_friction_combine_rule();
+    (Box::leak(Box::new(val)) as *mut CoefficientCombineRule) as jlong
 }
 
 #[no_mangle]
@@ -1000,14 +1675,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_position<'
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_translation<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::translation(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1restitution<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jfloat {
+    let it = &*(ptr as *mut __JNI_Collider);
+
+    it.__wrapped_restitution()
 }
 
 #[no_mangle]
@@ -1019,14 +1692,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_translatio
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_rotation<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::rotation(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1restitution_1combine_1rule<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    let it = &*(ptr as *mut __JNI_Collider);
+
+    let val = it.__wrapped_restitution_combine_rule();
+    (Box::leak(Box::new(val)) as *mut CoefficientCombineRule) as jlong
 }
 
 #[no_mangle]
@@ -1038,14 +1710,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_rotation<'
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_solver_groups<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::solver_groups(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1position<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    let it = &*(ptr as *mut __JNI_Collider);
+
+    let val = it.__wrapped_position();
+    (Box::leak(Box::new(val)) as *mut Isometry<f32>) as jlong
 }
 
 #[no_mangle]
@@ -1057,14 +1728,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_solver_gro
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_collision_groups<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::collision_groups(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1translation<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    let it = &*(ptr as *mut __JNI_Collider);
+
+    let val = it.__wrapped_translation();
+    (Box::leak(Box::new(val)) as *mut Vector<f32>) as jlong
 }
 
 #[no_mangle]
@@ -1076,14 +1746,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_collision_
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_material<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::material(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1rotation<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    let it = &*(ptr as *mut __JNI_Collider);
+
+    let val = it.__wrapped_rotation();
+    (Box::leak(Box::new(val)) as *mut Rotation<f32>) as jlong
 }
 
 #[no_mangle]
@@ -1095,14 +1764,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_material<'
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_volume<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::volume(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1solver_1groups<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    let it = &*(ptr as *mut __JNI_Collider);
+
+    let val = it.__wrapped_solver_groups();
+    (Box::leak(Box::new(val)) as *mut InteractionGroups) as jlong
 }
 
 #[no_mangle]
@@ -1114,14 +1782,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_volume<'lo
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_density<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::density(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1collision_1groups<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    let it = &*(ptr as *mut __JNI_Collider);
+
+    let val = it.__wrapped_collision_groups();
+    (Box::leak(Box::new(val)) as *mut InteractionGroups) as jlong
 }
 
 #[no_mangle]
@@ -1133,14 +1800,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_density<'l
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_mass<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::mass(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1material<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    let it = &*(ptr as *mut __JNI_Collider);
+
+    let val = it.__wrapped_material();
+    (Box::leak(Box::new(val)) as *mut ColliderMaterial) as jlong
 }
 
 #[no_mangle]
@@ -1152,14 +1818,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_mass<'loca
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_shape<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::shape(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1volume<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jfloat {
+    let it = &*(ptr as *mut __JNI_Collider);
+
+    it.__wrapped_volume()
 }
 
 #[no_mangle]
@@ -1171,14 +1835,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_shape<'loc
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_shared_shape<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::shared_shape(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1density<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jfloat {
+    let it = &*(ptr as *mut __JNI_Collider);
+
+    it.__wrapped_density()
 }
 
 #[no_mangle]
@@ -1190,14 +1852,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_shared_sha
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_compute_aabb<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::compute_aabb(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1mass<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jfloat {
+    let it = &*(ptr as *mut __JNI_Collider);
+
+    it.__wrapped_mass()
 }
 
 #[no_mangle]
@@ -1209,15 +1869,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_compute_aa
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_compute_swept_aabb<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    next_pos: &Isometry<f32>
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::compute_swept_aabb(this, next_pos), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1shared_1shape<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    let it = &*(ptr as *mut __JNI_Collider);
+
+    let val = it.__wrapped_shared_shape();
+    (Box::leak(Box::new(val)) as *mut SharedShape) as jlong
 }
 
 #[no_mangle]
@@ -1229,14 +1887,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_compute_sw
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_mass_properties<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::mass_properties(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1compute_1aabb<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    let it = &*(ptr as *mut __JNI_Collider);
+
+    let val = it.__wrapped_compute_aabb();
+    (Box::leak(Box::new(val)) as *mut Aabb) as jlong
 }
 
 #[no_mangle]
@@ -1248,14 +1905,14 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_mass_prope
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_contact_force_event_threshold<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::contact_force_event_threshold(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1compute_1swept_1aabb<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, next_pos: jlong) -> jlong {
+    let it = &*(ptr as *mut __JNI_Collider);
+    let next_pos = &*(next_pos as *mut Isometry<f32>);
+
+    let val = it.__wrapped_compute_swept_aabb(&next_pos);
+    (Box::leak(Box::new(val)) as *mut Aabb) as jlong
 }
 
 #[no_mangle]
@@ -1267,15 +1924,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_contact_fo
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_active_hooks<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    active_hooks: ActiveHooks
-) -> jobject {
-    let this: &mut Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::set_active_hooks(this, active_hooks), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1mass_1properties<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    let it = &*(ptr as *mut __JNI_Collider);
+
+    let val = it.__wrapped_mass_properties();
+    (Box::leak(Box::new(val)) as *mut MassProperties) as jlong
 }
 
 #[no_mangle]
@@ -1287,15 +1942,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_active
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_active_events<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    active_events: ActiveEvents
-) -> jobject {
-    let this: &mut Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::set_active_events(this, active_events), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1contact_1force_1event_1threshold<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jfloat {
+    let it = &*(ptr as *mut __JNI_Collider);
+
+    it.__wrapped_contact_force_event_threshold()
 }
 
 #[no_mangle]
@@ -1307,15 +1959,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_active
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_active_collision_types<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    active_collision_types: ActiveCollisionTypes
-) -> jobject {
-    let this: &mut Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::set_active_collision_types(this, active_collision_types), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1set_1active_1hooks<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, active_hooks: jlong) -> () {
+    let it = &mut *(ptr as *mut __JNI_Collider);
+    let active_hooks = &*(active_hooks as *mut ActiveHooks);
+
+    it.__wrapped_set_active_hooks(active_hooks.clone())
 }
 
 #[no_mangle]
@@ -1327,15 +1977,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_active
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_friction<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    coef: f32
-) -> jobject {
-    let this: &mut Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::set_friction(this, coef), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1set_1active_1events<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, active_events: jlong) -> () {
+    let it = &mut *(ptr as *mut __JNI_Collider);
+    let active_events = &*(active_events as *mut ActiveEvents);
+
+    it.__wrapped_set_active_events(active_events.clone())
 }
 
 #[no_mangle]
@@ -1347,15 +1995,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_fricti
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_friction_combine_rule<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    rule: CoefficientCombineRule
-) -> jobject {
-    let this: &mut Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::set_friction_combine_rule(this, rule), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1set_1active_1collision_1types<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, active_collision_types: jlong) -> () {
+    let it = &mut *(ptr as *mut __JNI_Collider);
+    let active_collision_types = &*(active_collision_types as *mut ActiveCollisionTypes);
+
+    it.__wrapped_set_active_collision_types(active_collision_types.clone())
 }
 
 #[no_mangle]
@@ -1367,15 +2013,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_fricti
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_restitution<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    coef: f32
-) -> jobject {
-    let this: &mut Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::set_restitution(this, coef), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1set_1friction<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, coef: jfloat) -> () {
+    let it = &mut *(ptr as *mut __JNI_Collider);
+
+    it.__wrapped_set_friction(coef)
 }
 
 #[no_mangle]
@@ -1387,15 +2030,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_restit
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_restitution_combine_rule<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    rule: CoefficientCombineRule
-) -> jobject {
-    let this: &mut Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::set_restitution_combine_rule(this, rule), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1set_1friction_1combine_1rule<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, rule: jlong) -> () {
+    let it = &mut *(ptr as *mut __JNI_Collider);
+    let rule = &*(rule as *mut CoefficientCombineRule);
+
+    it.__wrapped_set_friction_combine_rule(rule.clone())
 }
 
 #[no_mangle]
@@ -1407,15 +2048,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_restit
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_contact_force_event_threshold<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    threshold: f32
-) -> jobject {
-    let this: &mut Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::set_contact_force_event_threshold(this, threshold), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1set_1restitution<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, coef: jfloat) -> () {
+    let it = &mut *(ptr as *mut __JNI_Collider);
+
+    it.__wrapped_set_restitution(coef)
 }
 
 #[no_mangle]
@@ -1427,15 +2065,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_contac
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_sensor<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    is_sensor: bool
-) -> jobject {
-    let this: &mut Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::set_sensor(this, is_sensor), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1set_1restitution_1combine_1rule<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, rule: jlong) -> () {
+    let it = &mut *(ptr as *mut __JNI_Collider);
+    let rule = &*(rule as *mut CoefficientCombineRule);
+
+    it.__wrapped_set_restitution_combine_rule(rule.clone())
 }
 
 #[no_mangle]
@@ -1447,15 +2083,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_sensor
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_enabled<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    enabled: bool
-) -> jobject {
-    let this: &mut Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::set_enabled(this, enabled), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1set_1contact_1force_1event_1threshold<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, threshold: jfloat) -> () {
+    let it = &mut *(ptr as *mut __JNI_Collider);
+
+    it.__wrapped_set_contact_force_event_threshold(threshold)
 }
 
 #[no_mangle]
@@ -1467,15 +2100,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_enable
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_translation<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    translation: Vector<f32>
-) -> jobject {
-    let this: &mut Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::set_translation(this, translation), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1set_1sensor<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, is_sensor: jboolean) -> () {
+    let it = &mut *(ptr as *mut __JNI_Collider);
+
+    it.__wrapped_set_sensor(is_sensor == 1)
 }
 
 #[no_mangle]
@@ -1487,15 +2117,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_transl
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_rotation<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    rotation: Rotation<f32>
-) -> jobject {
-    let this: &mut Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::set_rotation(this, rotation), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1set_1enabled<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, enabled: jboolean) -> () {
+    let it = &mut *(ptr as *mut __JNI_Collider);
+
+    it.__wrapped_set_enabled(enabled == 1)
 }
 
 #[no_mangle]
@@ -1507,15 +2134,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_rotati
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_position<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    position: Isometry<f32>
-) -> jobject {
-    let this: &mut Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::set_position(this, position), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1set_1translation<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, translation: jlong) -> () {
+    let it = &mut *(ptr as *mut __JNI_Collider);
+    let translation = &*(translation as *mut Vector<f32>);
+
+    it.__wrapped_set_translation(translation.clone())
 }
 
 #[no_mangle]
@@ -1527,15 +2152,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_positi
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_translation_wrt_parent<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    translation: Vector<f32>
-) -> jobject {
-    let this: &mut Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::set_translation_wrt_parent(this, translation), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1set_1rotation<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, rotation: jlong) -> () {
+    let it = &mut *(ptr as *mut __JNI_Collider);
+    let rotation = &*(rotation as *mut Rotation<f32>);
+
+    it.__wrapped_set_rotation(rotation.clone())
 }
 
 #[no_mangle]
@@ -1547,15 +2170,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_transl
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_rotation_wrt_parent<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    rotation: AngVector<f32>
-) -> jobject {
-    let this: &mut Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::set_rotation_wrt_parent(this, rotation), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1set_1position<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, position: jlong) -> () {
+    let it = &mut *(ptr as *mut __JNI_Collider);
+    let position = &*(position as *mut Isometry<f32>);
+
+    it.__wrapped_set_position(position.clone())
 }
 
 #[no_mangle]
@@ -1567,15 +2188,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_rotati
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_position_wrt_parent<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    pos_wrt_parent: Isometry<f32>
-) -> jobject {
-    let this: &mut Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::set_position_wrt_parent(this, pos_wrt_parent), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1set_1translation_1wrt_1parent<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, translation: jlong) -> () {
+    let it = &mut *(ptr as *mut __JNI_Collider);
+    let translation = &*(translation as *mut Vector<f32>);
+
+    it.__wrapped_set_translation_wrt_parent(translation.clone())
 }
 
 #[no_mangle]
@@ -1587,15 +2206,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_positi
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_collision_groups<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    groups: InteractionGroups
-) -> jobject {
-    let this: &mut Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::set_collision_groups(this, groups), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1set_1rotation_1wrt_1parent<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, rotation: jlong) -> () {
+    let it = &mut *(ptr as *mut __JNI_Collider);
+    let rotation = &*(rotation as *mut AngVector<f32>);
+
+    it.__wrapped_set_rotation_wrt_parent(rotation.clone())
 }
 
 #[no_mangle]
@@ -1607,15 +2224,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_collis
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_solver_groups<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    groups: InteractionGroups
-) -> jobject {
-    let this: &mut Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::set_solver_groups(this, groups), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1set_1position_1wrt_1parent<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, pos_wrt_parent: jlong) -> () {
+    let it = &mut *(ptr as *mut __JNI_Collider);
+    let pos_wrt_parent = &*(pos_wrt_parent as *mut Isometry<f32>);
+
+    it.__wrapped_set_position_wrt_parent(pos_wrt_parent.clone())
 }
 
 #[no_mangle]
@@ -1627,15 +2242,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_solver
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_density<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    density: f32
-) -> jobject {
-    let this: &mut Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::set_density(this, density), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1set_1collision_1groups<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, groups: jlong) -> () {
+    let it = &mut *(ptr as *mut __JNI_Collider);
+    let groups = &*(groups as *mut InteractionGroups);
+
+    it.__wrapped_set_collision_groups(groups.clone())
 }
 
 #[no_mangle]
@@ -1647,15 +2260,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_densit
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_mass<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    mass: f32
-) -> jobject {
-    let this: &mut Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::set_mass(this, mass), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1set_1solver_1groups<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, groups: jlong) -> () {
+    let it = &mut *(ptr as *mut __JNI_Collider);
+    let groups = &*(groups as *mut InteractionGroups);
+
+    it.__wrapped_set_solver_groups(groups.clone())
 }
 
 #[no_mangle]
@@ -1667,15 +2278,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_mass<'
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_mass_properties<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    mass_properties: MassProperties
-) -> jobject {
-    let this: &mut Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::set_mass_properties(this, mass_properties), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1set_1density<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, density: jfloat) -> () {
+    let it = &mut *(ptr as *mut __JNI_Collider);
+
+    it.__wrapped_set_density(density)
 }
 
 #[no_mangle]
@@ -1687,14 +2295,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_mass_p
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_shape_mut<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &mut Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::shape_mut(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1set_1mass<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, mass: jfloat) -> () {
+    let it = &mut *(ptr as *mut __JNI_Collider);
+
+    it.__wrapped_set_mass(mass)
 }
 
 #[no_mangle]
@@ -1706,15 +2312,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_shape_mut<
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_shape<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    shape: SharedShape
-) -> jobject {
-    let this: &mut Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::set_shape(this, shape), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1set_1mass_1properties<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, mass_properties: jlong) -> () {
+    let it = &mut *(ptr as *mut __JNI_Collider);
+    let mass_properties = &*(mass_properties as *mut MassProperties);
+
+    it.__wrapped_set_mass_properties(mass_properties.clone())
 }
 
 #[no_mangle]
@@ -1726,14 +2330,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_set_shape<
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_parent<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::parent(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1set_1shape<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, shape: jlong) -> () {
+    let it = &mut *(ptr as *mut __JNI_Collider);
+    let shape = &*(shape as *mut SharedShape);
+
+    it.__wrapped_set_shape(shape.clone())
 }
 
 #[no_mangle]
@@ -1745,14 +2348,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_parent<'lo
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_position_wrt_parent<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::position_wrt_parent(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1parent<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    let it = &*(ptr as *mut __JNI_Collider);
+
+    let val = it.__wrapped_parent().unwrap_or_default();
+    (Box::leak(Box::new(val)) as *mut RigidBodyHandle) as jlong
 }
 
 #[no_mangle]
@@ -1764,14 +2366,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_position_w
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_clone<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::clone(this), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1clone<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    let it = &*(ptr as *mut __JNI_Collider);
+
+    let val = it.__wrapped_clone();
+    (Box::leak(Box::new(val)) as *mut Collider) as jlong
 }
 
 #[no_mangle]
@@ -1783,15 +2384,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_clone<'loc
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_clone_from<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    other: &Collider
-) -> jobject {
-    let this: &mut Collider = jlong_to_pointer::<Collider>(this).as_mut().unwrap();
-    object_to_jobject(env, Collider::clone_from(this, other), "com/dimforge/rapier3d/Collider".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1clone_1from<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, other: jlong) -> () {
+    let it = &mut *(ptr as *mut __JNI_Collider);
+    let other = &*(other as *mut Collider);
+
+    it.__wrapped_clone_from(&other)
 }
 
 #[no_mangle]
@@ -1803,49 +2402,648 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_clone_from
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_create<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    shape: SharedShape
-) -> jobject {
-    object_to_jobject(env, ColliderBuilder::new(shape), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Collider_jni_1free<'local, >(_env: JNIEnv<'local>, _class: JClass<'local>, ptr: jlong) {
+    let it = Box::from_raw(ptr as *mut __JNI_Collider);
+    
 }
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_compound<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    shapes: List<Tuple<Vector3, SharedShape>>
-) -> jobject {
-    object_to_jobject(env, ColliderBuilderCustom::compound(shapes), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+#[allow(non_camel_case_types)]
+pub struct __JNI_ColliderBuilder {
+    pub __inner: ColliderBuilder,
 }
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_ball<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    radius: f32
-) -> jobject {
-    object_to_jobject(env, ColliderBuilder::ball(radius), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+impl __JNI_ColliderBuilder {
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn to_rust(&self) -> ColliderBuilder {
+        self.__inner.clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_create(shape: SharedShape) -> ColliderBuilder {
+        ColliderBuilder::new(shape)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_compound(shapes: List<Tuple<Vector3, SharedShape>>) -> ColliderBuilder {
+        ColliderBuilderCustom::compound(shapes)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_ball(radius: f32) -> ColliderBuilder {
+        ColliderBuilder::ball(radius)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_cylinder(half_height: f32, radius: f32) -> ColliderBuilder {
+        ColliderBuilder::cylinder(half_height, radius)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_round_cylinder(half_height: f32, radius: f32, border_radius: f32) -> ColliderBuilder {
+        ColliderBuilder::round_cylinder(half_height, radius, border_radius)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_cone(half_height: f32, radius: f32) -> ColliderBuilder {
+        ColliderBuilder::cone(half_height, radius)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_round_cone(half_height: f32, radius: f32, border_radius: f32) -> ColliderBuilder {
+        ColliderBuilder::round_cone(half_height, radius, border_radius)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_capsule_x(half_height: f32, radius: f32) -> ColliderBuilder {
+        ColliderBuilder::capsule_x(half_height, radius)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_capsule_y(half_height: f32, radius: f32) -> ColliderBuilder {
+        ColliderBuilder::capsule_y(half_height, radius)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_capsule_z(half_height: f32, radius: f32) -> ColliderBuilder {
+        ColliderBuilder::capsule_z(half_height, radius)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_cuboid(hx: f32, hy: f32, hz: f32) -> ColliderBuilder {
+        ColliderBuilder::cuboid(hx, hy, hz)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_round_cuboid(hx: f32, hy: f32, hz: f32, border_radius: f32) -> ColliderBuilder {
+        ColliderBuilder::round_cuboid(hx, hy, hz, border_radius)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_heightfield(heights: DMatrix<f32>, scale: Vector<f32>) -> ColliderBuilder {
+        ColliderBuilder::heightfield(heights, scale)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_polyline(vertices: List<Vector3>, indices: Optional<List<Tuple<u32, u32>>>) -> ColliderBuilder {
+        ColliderBuilderCustom::polyline(vertices, indices)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_trimesh(vertices: List<Vector3>, indices: List<Triple<u32, u32, u32>>) -> ColliderBuilder {
+        ColliderBuilderCustom::trimesh(vertices, indices)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_trimesh_with_flags(vertices: List<Vector3>, indices: List<Triple<u32, u32, u32>>, flags: TriMeshFlags) -> ColliderBuilder {
+        ColliderBuilderCustom::trimesh_with_flags(vertices, indices, flags)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_convex_decomposition(vertices: List<Vector3>, indices: List<Triple<u32, u32, u32>>) -> ColliderBuilder {
+        ColliderBuilderCustom::convex_decomposition(vertices, indices)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_round_convex_decomposition(vertices: List<Vector3>, indices: List<Triple<u32, u32, u32>>, border_radius: f32) -> ColliderBuilder {
+        ColliderBuilderCustom::round_convex_decomposition(vertices, indices, border_radius)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_convex_decomposition_with_params(vertices: List<Vector3>, indices: List<Triple<u32, u32, u32>>, params: &VHACDParameters) -> ColliderBuilder {
+        ColliderBuilderCustom::convex_decomposition_with_params(vertices, indices, params)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_round_convex_decomposition_with_params(vertices: List<Vector3>, indices: List<Triple<u32, u32, u32>>, params: &VHACDParameters, border_radius: f32) -> ColliderBuilder {
+        ColliderBuilderCustom::round_convex_decomposition_with_params(vertices, indices, params, border_radius)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_convex_hull(points: List<Vector3>) -> Option<ColliderBuilder> {
+        ColliderBuilderCustom::convex_hull(points)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_round_convex_hull(points: List<Vector3>, border_radius: f32) -> Option<ColliderBuilder> {
+        ColliderBuilderCustom::round_convex_hull(points, border_radius)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_convex_mesh(points: List<Vector3>, indices: List<Triple<u32, u32, u32>>) -> Option<ColliderBuilder> {
+        ColliderBuilderCustom::convex_mesh(points, indices)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_round_convex_mesh(points: List<Vector3>, indices: List<Triple<u32, u32, u32>>, border_radius: f32) -> Option<ColliderBuilder> {
+        ColliderBuilderCustom::round_convex_mesh(points, indices, border_radius)
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_build(&self, ) -> Collider {
+        ColliderBuilder::build(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_default_friction() -> f32 {
+        ColliderBuilder::default_friction()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_default_density() -> f32 {
+        ColliderBuilder::default_density()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_collision_groups(&self, groups: InteractionGroups) -> ColliderBuilder {
+        ColliderBuilder::collision_groups(self.to_rust(), groups).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_solver_groups(&self, groups: InteractionGroups) -> ColliderBuilder {
+        ColliderBuilder::solver_groups(self.to_rust(), groups).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_sensor(&self, is_sensor: bool) -> ColliderBuilder {
+        ColliderBuilder::sensor(self.to_rust(), is_sensor).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_active_hooks(&self, active_hooks: ActiveHooks) -> ColliderBuilder {
+        ColliderBuilder::active_hooks(self.to_rust(), active_hooks).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_active_events(&self, active_events: ActiveEvents) -> ColliderBuilder {
+        ColliderBuilder::active_events(self.to_rust(), active_events).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_active_collision_types(&self, active_collision_types: ActiveCollisionTypes) -> ColliderBuilder {
+        ColliderBuilder::active_collision_types(self.to_rust(), active_collision_types).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_friction(&self, friction: f32) -> ColliderBuilder {
+        ColliderBuilder::friction(self.to_rust(), friction).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_friction_combine_rule(&self, rule: CoefficientCombineRule) -> ColliderBuilder {
+        ColliderBuilder::friction_combine_rule(self.to_rust(), rule).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_restitution(&self, restitution: f32) -> ColliderBuilder {
+        ColliderBuilder::restitution(self.to_rust(), restitution).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_restitution_combine_rule(&self, rule: CoefficientCombineRule) -> ColliderBuilder {
+        ColliderBuilder::restitution_combine_rule(self.to_rust(), rule).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_density(&self, density: f32) -> ColliderBuilder {
+        ColliderBuilder::density(self.to_rust(), density).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_mass(&self, mass: f32) -> ColliderBuilder {
+        ColliderBuilder::mass(self.to_rust(), mass).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_mass_properties(&self, mass_properties: MassProperties) -> ColliderBuilder {
+        ColliderBuilder::mass_properties(self.to_rust(), mass_properties).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_contact_force_event_threshold(&self, threshold: f32) -> ColliderBuilder {
+        ColliderBuilder::contact_force_event_threshold(self.to_rust(), threshold).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_enabled(&self, enabled: bool) -> ColliderBuilder {
+        ColliderBuilder::enabled(self.to_rust(), enabled).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_clone(&self, ) -> ColliderBuilder {
+        ColliderBuilder::clone(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_clone_from(&mut self, other: &ColliderBuilder) -> () {
+        ColliderBuilder::clone_from(&mut self.to_rust(), other).clone()
+    }
 }
 
 #[no_mangle]
@@ -1857,13 +3055,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_bal
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_halfspace<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    outward_normal: Vector3
-) -> jobject {
-    object_to_jobject(env, ColliderBuilder::halfspace(outward_normal.into()), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1create<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, shape: jlong) -> jlong {
+        let shape = &*(shape as *mut SharedShape);
+
+    let val = __JNI_ColliderBuilder::__wrapped_create(shape.clone());
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -1875,14 +3073,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_hal
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_cylinder<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    half_height: f32,
-    radius: f32
-) -> jobject {
-    object_to_jobject(env, ColliderBuilder::cylinder(half_height, radius), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1compound<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, shapes: jlong) -> jlong {
+        let shapes = &*(shapes as *mut List<Tuple<Vector3, SharedShape>>);
+
+    let val = __JNI_ColliderBuilder::__wrapped_compound(shapes.clone());
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -1894,15 +3091,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_cyl
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_round_cylinder<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    half_height: f32,
-    radius: f32,
-    border_radius: f32
-) -> jobject {
-    object_to_jobject(env, ColliderBuilder::round_cylinder(half_height, radius, border_radius), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1ball<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, radius: jfloat) -> jlong {
+    
+
+    let val = __JNI_ColliderBuilder::__wrapped_ball(radius);
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -1914,14 +3109,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_rou
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_cone<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    half_height: f32,
-    radius: f32
-) -> jobject {
-    object_to_jobject(env, ColliderBuilder::cone(half_height, radius), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1cylinder<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, half_height: jfloat, radius: jfloat) -> jlong {
+    
+
+    let val = __JNI_ColliderBuilder::__wrapped_cylinder(half_height, radius);
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -1933,15 +3127,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_con
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_round_cone<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    half_height: f32,
-    radius: f32,
-    border_radius: f32
-) -> jobject {
-    object_to_jobject(env, ColliderBuilder::round_cone(half_height, radius, border_radius), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1round_1cylinder<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, half_height: jfloat, radius: jfloat, border_radius: jfloat) -> jlong {
+    
+
+    let val = __JNI_ColliderBuilder::__wrapped_round_cylinder(half_height, radius, border_radius);
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -1953,14 +3145,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_rou
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_capsule_x<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    half_height: f32,
-    radius: f32
-) -> jobject {
-    object_to_jobject(env, ColliderBuilder::capsule_x(half_height, radius), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1cone<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, half_height: jfloat, radius: jfloat) -> jlong {
+    
+
+    let val = __JNI_ColliderBuilder::__wrapped_cone(half_height, radius);
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -1972,14 +3163,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_cap
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_capsule_y<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    half_height: f32,
-    radius: f32
-) -> jobject {
-    object_to_jobject(env, ColliderBuilder::capsule_y(half_height, radius), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1round_1cone<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, half_height: jfloat, radius: jfloat, border_radius: jfloat) -> jlong {
+    
+
+    let val = __JNI_ColliderBuilder::__wrapped_round_cone(half_height, radius, border_radius);
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -1991,14 +3181,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_cap
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_capsule_z<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    half_height: f32,
-    radius: f32
-) -> jobject {
-    object_to_jobject(env, ColliderBuilder::capsule_z(half_height, radius), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1capsule_1x<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, half_height: jfloat, radius: jfloat) -> jlong {
+    
+
+    let val = __JNI_ColliderBuilder::__wrapped_capsule_x(half_height, radius);
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2010,15 +3199,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_cap
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_cuboid<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    hx: f32,
-    hy: f32,
-    hz: f32
-) -> jobject {
-    object_to_jobject(env, ColliderBuilder::cuboid(hx, hy, hz), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1capsule_1y<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, half_height: jfloat, radius: jfloat) -> jlong {
+    
+
+    let val = __JNI_ColliderBuilder::__wrapped_capsule_y(half_height, radius);
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2030,16 +3217,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_cub
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_round_cuboid<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    hx: f32,
-    hy: f32,
-    hz: f32,
-    border_radius: f32
-) -> jobject {
-    object_to_jobject(env, ColliderBuilder::round_cuboid(hx, hy, hz, border_radius), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1capsule_1z<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, half_height: jfloat, radius: jfloat) -> jlong {
+    
+
+    let val = __JNI_ColliderBuilder::__wrapped_capsule_z(half_height, radius);
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2051,14 +3235,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_rou
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_segment<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    a: Vector3,
-    b: Vector3
-) -> jobject {
-    object_to_jobject(env, ColliderBuilder::segment(a.into(), b.into()), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1cuboid<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, hx: jfloat, hy: jfloat, hz: jfloat) -> jlong {
+    
+
+    let val = __JNI_ColliderBuilder::__wrapped_cuboid(hx, hy, hz);
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2070,15 +3253,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_seg
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_triangle<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    a: Vector3,
-    b: Vector3,
-    c: Vector3
-) -> jobject {
-    object_to_jobject(env, ColliderBuilder::triangle(a.into(), b.into(), c.into()), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1round_1cuboid<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, hx: jfloat, hy: jfloat, hz: jfloat, border_radius: jfloat) -> jlong {
+    
+
+    let val = __JNI_ColliderBuilder::__wrapped_round_cuboid(hx, hy, hz, border_radius);
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2090,16 +3271,14 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_tri
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_round_triangle<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    a: Vector3,
-    b: Vector3,
-    c: Vector3,
-    border_radius: f32
-) -> jobject {
-    object_to_jobject(env, ColliderBuilder::round_triangle(a.into(), b.into(), c.into(), border_radius), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1heightfield<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, heights: jlong, scale: jlong) -> jlong {
+        let heights = &*(heights as *mut DMatrix<f32>);
+    let scale = &*(scale as *mut Vector<f32>);
+
+    let val = __JNI_ColliderBuilder::__wrapped_heightfield(heights.clone(), scale.clone());
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2111,14 +3290,14 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_rou
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_heightfield<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    heights: DMatrix<f32>,
-    scale: Vector<f32>
-) -> jobject {
-    object_to_jobject(env, ColliderBuilder::heightfield(heights, scale), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1polyline<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, vertices: jlong, indices: jlong) -> jlong {
+        let vertices = &*(vertices as *mut List<Vector3>);
+    let indices = &*(indices as *mut Optional<List<Tuple<u32, u32>>>);
+
+    let val = __JNI_ColliderBuilder::__wrapped_polyline(vertices.clone(), indices.clone());
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2130,14 +3309,14 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_hei
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_polyline<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    vertices: List<Vector3>,
-    indices: Optional<List<Tuple<u32, u32>>>
-) -> jobject {
-    object_to_jobject(env, ColliderBuilderCustom::polyline(vertices, indices), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1trimesh<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, vertices: jlong, indices: jlong) -> jlong {
+        let vertices = &*(vertices as *mut List<Vector3>);
+    let indices = &*(indices as *mut List<Triple<u32, u32, u32>>);
+
+    let val = __JNI_ColliderBuilder::__wrapped_trimesh(vertices.clone(), indices.clone());
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2149,14 +3328,15 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_pol
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_trimesh<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    vertices: List<Vector3>,
-    indices: List<Triple<u32, u32, u32>>
-) -> jobject {
-    object_to_jobject(env, ColliderBuilderCustom::trimesh(vertices, indices), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1trimesh_1with_1flags<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, vertices: jlong, indices: jlong, flags: jlong) -> jlong {
+        let vertices = &*(vertices as *mut List<Vector3>);
+    let indices = &*(indices as *mut List<Triple<u32, u32, u32>>);
+    let flags = &*(flags as *mut TriMeshFlags);
+
+    let val = __JNI_ColliderBuilder::__wrapped_trimesh_with_flags(vertices.clone(), indices.clone(), flags.clone());
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2168,15 +3348,14 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_tri
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_trimesh_with_flags<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    vertices: List<Vector3>,
-    indices: List<Triple<u32, u32, u32>>,
-    flags: TriMeshFlags
-) -> jobject {
-    object_to_jobject(env, ColliderBuilderCustom::trimesh_with_flags(vertices, indices, flags), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1convex_1decomposition<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, vertices: jlong, indices: jlong) -> jlong {
+        let vertices = &*(vertices as *mut List<Vector3>);
+    let indices = &*(indices as *mut List<Triple<u32, u32, u32>>);
+
+    let val = __JNI_ColliderBuilder::__wrapped_convex_decomposition(vertices.clone(), indices.clone());
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2188,14 +3367,14 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_tri
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_convex_decomposition<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    vertices: List<Vector3>,
-    indices: List<Triple<u32, u32, u32>>
-) -> jobject {
-    object_to_jobject(env, ColliderBuilderCustom::convex_decomposition(vertices, indices), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1round_1convex_1decomposition<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, vertices: jlong, indices: jlong, border_radius: jfloat) -> jlong {
+        let vertices = &*(vertices as *mut List<Vector3>);
+    let indices = &*(indices as *mut List<Triple<u32, u32, u32>>);
+
+    let val = __JNI_ColliderBuilder::__wrapped_round_convex_decomposition(vertices.clone(), indices.clone(), border_radius);
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2207,15 +3386,15 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_con
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_round_convex_decomposition<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    vertices: List<Vector3>,
-    indices: List<Triple<u32, u32, u32>>,
-    border_radius: f32
-) -> jobject {
-    object_to_jobject(env, ColliderBuilderCustom::round_convex_decomposition(vertices, indices, border_radius), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1convex_1decomposition_1with_1params<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, vertices: jlong, indices: jlong, params: jlong) -> jlong {
+        let vertices = &*(vertices as *mut List<Vector3>);
+    let indices = &*(indices as *mut List<Triple<u32, u32, u32>>);
+    let params = &*(params as *mut VHACDParameters);
+
+    let val = __JNI_ColliderBuilder::__wrapped_convex_decomposition_with_params(vertices.clone(), indices.clone(), &params);
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2227,15 +3406,15 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_rou
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_convex_decomposition_with_params<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    vertices: List<Vector3>,
-    indices: List<Triple<u32, u32, u32>>,
-    params: &VHACDParameters
-) -> jobject {
-    object_to_jobject(env, ColliderBuilderCustom::convex_decomposition_with_params(vertices, indices, params), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1round_1convex_1decomposition_1with_1params<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, vertices: jlong, indices: jlong, params: jlong, border_radius: jfloat) -> jlong {
+        let vertices = &*(vertices as *mut List<Vector3>);
+    let indices = &*(indices as *mut List<Triple<u32, u32, u32>>);
+    let params = &*(params as *mut VHACDParameters);
+
+    let val = __JNI_ColliderBuilder::__wrapped_round_convex_decomposition_with_params(vertices.clone(), indices.clone(), &params, border_radius);
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2247,16 +3426,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_con
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_round_convex_decomposition_with_params<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    vertices: List<Vector3>,
-    indices: List<Triple<u32, u32, u32>>,
-    params: &VHACDParameters,
-    border_radius: f32
-) -> jobject {
-    object_to_jobject(env, ColliderBuilderCustom::round_convex_decomposition_with_params(vertices, indices, params, border_radius), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1convex_1hull<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, points: jlong) -> jlong {
+        let points = &*(points as *mut List<Vector3>);
+
+    let val = __JNI_ColliderBuilder::__wrapped_convex_hull(points.clone()).unwrap_or_default();
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2268,13 +3444,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_rou
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_convex_hull<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    points: List<Vector3>
-) -> jobject {
-    object_to_jobject(env, ColliderBuilderCustom::convex_hull(points), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1round_1convex_1hull<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, points: jlong, border_radius: jfloat) -> jlong {
+        let points = &*(points as *mut List<Vector3>);
+
+    let val = __JNI_ColliderBuilder::__wrapped_round_convex_hull(points.clone(), border_radius).unwrap_or_default();
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2286,14 +3462,14 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_con
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_round_convex_hull<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    points: List<Vector3>,
-    border_radius: f32
-) -> jobject {
-    object_to_jobject(env, ColliderBuilderCustom::round_convex_hull(points, border_radius), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1convex_1mesh<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, points: jlong, indices: jlong) -> jlong {
+        let points = &*(points as *mut List<Vector3>);
+    let indices = &*(indices as *mut List<Triple<u32, u32, u32>>);
+
+    let val = __JNI_ColliderBuilder::__wrapped_convex_mesh(points.clone(), indices.clone()).unwrap_or_default();
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2305,14 +3481,14 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_rou
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_convex_mesh<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    points: List<Vector3>,
-    indices: List<Triple<u32, u32, u32>>
-) -> jobject {
-    object_to_jobject(env, ColliderBuilderCustom::convex_mesh(points, indices), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1round_1convex_1mesh<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, points: jlong, indices: jlong, border_radius: jfloat) -> jlong {
+        let points = &*(points as *mut List<Vector3>);
+    let indices = &*(indices as *mut List<Triple<u32, u32, u32>>);
+
+    let val = __JNI_ColliderBuilder::__wrapped_round_convex_mesh(points.clone(), indices.clone(), border_radius).unwrap_or_default();
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2324,15 +3500,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_con
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_round_convex_mesh<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    points: List<Vector3>,
-    indices: List<Triple<u32, u32, u32>>,
-    border_radius: f32
-) -> jobject {
-    object_to_jobject(env, ColliderBuilderCustom::round_convex_mesh(points, indices, border_radius), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1build<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    let it = &*(ptr as *mut __JNI_ColliderBuilder);
+
+    let val = it.__wrapped_build();
+    (Box::leak(Box::new(val)) as *mut Collider) as jlong
 }
 
 #[no_mangle]
@@ -2344,14 +3518,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_rou
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_build<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
-    object_to_jobject(env, ColliderBuilder::build(this), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1default_1friction<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jfloat {
+    
+
+    __JNI_ColliderBuilder::__wrapped_default_friction()
 }
 
 #[no_mangle]
@@ -2363,12 +3535,12 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_bui
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_default_friction<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>
-) -> jobject {
-    object_to_jobject(env, ColliderBuilder::default_friction(), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1default_1density<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jfloat {
+    
+
+    __JNI_ColliderBuilder::__wrapped_default_density()
 }
 
 #[no_mangle]
@@ -2380,12 +3552,18 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_def
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_default_density<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>
-) -> jobject {
-    object_to_jobject(env, ColliderBuilder::default_density(), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1collision_1groups<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, groups: jlong) -> jlong {
+    let it = &*(ptr as *mut __JNI_ColliderBuilder);
+    let groups = &*(groups as *mut InteractionGroups);
+
+    let val = it.__wrapped_collision_groups(groups.clone());
+    let it = Box::from_raw(ptr as *mut __JNI_ColliderBuilder);
+    
+
+    let val = val;
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2397,16 +3575,18 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_def
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_user_data<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    data: u128
-) -> jobject {
-    let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
-    let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::user_data(this, data), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1solver_1groups<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, groups: jlong) -> jlong {
+    let it = &*(ptr as *mut __JNI_ColliderBuilder);
+    let groups = &*(groups as *mut InteractionGroups);
+
+    let val = it.__wrapped_solver_groups(groups.clone());
+    let it = Box::from_raw(ptr as *mut __JNI_ColliderBuilder);
+    
+
+    let val = val;
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2418,16 +3598,17 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_use
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_collision_groups<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    groups: InteractionGroups
-) -> jobject {
-    let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
-    let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::collision_groups(this, groups), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1sensor<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, is_sensor: jboolean) -> jlong {
+    let it = &*(ptr as *mut __JNI_ColliderBuilder);
+
+    let val = it.__wrapped_sensor(is_sensor == 1);
+    let it = Box::from_raw(ptr as *mut __JNI_ColliderBuilder);
+    
+
+    let val = val;
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2439,16 +3620,18 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_col
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_solver_groups<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    groups: InteractionGroups
-) -> jobject {
-    let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
-    let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::solver_groups(this, groups), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1active_1hooks<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, active_hooks: jlong) -> jlong {
+    let it = &*(ptr as *mut __JNI_ColliderBuilder);
+    let active_hooks = &*(active_hooks as *mut ActiveHooks);
+
+    let val = it.__wrapped_active_hooks(active_hooks.clone());
+    let it = Box::from_raw(ptr as *mut __JNI_ColliderBuilder);
+    
+
+    let val = val;
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2460,16 +3643,18 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_sol
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_sensor<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    is_sensor: bool
-) -> jobject {
-    let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
-    let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::sensor(this, is_sensor), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1active_1events<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, active_events: jlong) -> jlong {
+    let it = &*(ptr as *mut __JNI_ColliderBuilder);
+    let active_events = &*(active_events as *mut ActiveEvents);
+
+    let val = it.__wrapped_active_events(active_events.clone());
+    let it = Box::from_raw(ptr as *mut __JNI_ColliderBuilder);
+    
+
+    let val = val;
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2481,16 +3666,18 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_sen
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_active_hooks<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    active_hooks: ActiveHooks
-) -> jobject {
-    let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
-    let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::active_hooks(this, active_hooks), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1active_1collision_1types<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, active_collision_types: jlong) -> jlong {
+    let it = &*(ptr as *mut __JNI_ColliderBuilder);
+    let active_collision_types = &*(active_collision_types as *mut ActiveCollisionTypes);
+
+    let val = it.__wrapped_active_collision_types(active_collision_types.clone());
+    let it = Box::from_raw(ptr as *mut __JNI_ColliderBuilder);
+    
+
+    let val = val;
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2502,16 +3689,17 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_act
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_active_events<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    active_events: ActiveEvents
-) -> jobject {
-    let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
-    let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::active_events(this, active_events), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1friction<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, friction: jfloat) -> jlong {
+    let it = &*(ptr as *mut __JNI_ColliderBuilder);
+
+    let val = it.__wrapped_friction(friction);
+    let it = Box::from_raw(ptr as *mut __JNI_ColliderBuilder);
+    
+
+    let val = val;
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2523,16 +3711,18 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_act
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_active_collision_types<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    active_collision_types: ActiveCollisionTypes
-) -> jobject {
-    let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
-    let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::active_collision_types(this, active_collision_types), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1friction_1combine_1rule<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, rule: jlong) -> jlong {
+    let it = &*(ptr as *mut __JNI_ColliderBuilder);
+    let rule = &*(rule as *mut CoefficientCombineRule);
+
+    let val = it.__wrapped_friction_combine_rule(rule.clone());
+    let it = Box::from_raw(ptr as *mut __JNI_ColliderBuilder);
+    
+
+    let val = val;
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2544,16 +3734,17 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_act
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_friction<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    friction: f32
-) -> jobject {
-    let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
-    let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::friction(this, friction), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1restitution<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, restitution: jfloat) -> jlong {
+    let it = &*(ptr as *mut __JNI_ColliderBuilder);
+
+    let val = it.__wrapped_restitution(restitution);
+    let it = Box::from_raw(ptr as *mut __JNI_ColliderBuilder);
+    
+
+    let val = val;
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2565,16 +3756,18 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_fri
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_friction_combine_rule<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    rule: CoefficientCombineRule
-) -> jobject {
-    let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
-    let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::friction_combine_rule(this, rule), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1restitution_1combine_1rule<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, rule: jlong) -> jlong {
+    let it = &*(ptr as *mut __JNI_ColliderBuilder);
+    let rule = &*(rule as *mut CoefficientCombineRule);
+
+    let val = it.__wrapped_restitution_combine_rule(rule.clone());
+    let it = Box::from_raw(ptr as *mut __JNI_ColliderBuilder);
+    
+
+    let val = val;
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2586,16 +3779,17 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_fri
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_restitution<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    restitution: f32
-) -> jobject {
-    let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
-    let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::restitution(this, restitution), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1density<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, density: jfloat) -> jlong {
+    let it = &*(ptr as *mut __JNI_ColliderBuilder);
+
+    let val = it.__wrapped_density(density);
+    let it = Box::from_raw(ptr as *mut __JNI_ColliderBuilder);
+    
+
+    let val = val;
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2607,16 +3801,17 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_res
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_restitution_combine_rule<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    rule: CoefficientCombineRule
-) -> jobject {
-    let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
-    let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::restitution_combine_rule(this, rule), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1mass<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, mass: jfloat) -> jlong {
+    let it = &*(ptr as *mut __JNI_ColliderBuilder);
+
+    let val = it.__wrapped_mass(mass);
+    let it = Box::from_raw(ptr as *mut __JNI_ColliderBuilder);
+    
+
+    let val = val;
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2628,16 +3823,18 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_res
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_density<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    density: f32
-) -> jobject {
-    let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
-    let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::density(this, density), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1mass_1properties<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, mass_properties: jlong) -> jlong {
+    let it = &*(ptr as *mut __JNI_ColliderBuilder);
+    let mass_properties = &*(mass_properties as *mut MassProperties);
+
+    let val = it.__wrapped_mass_properties(mass_properties.clone());
+    let it = Box::from_raw(ptr as *mut __JNI_ColliderBuilder);
+    
+
+    let val = val;
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2649,16 +3846,17 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_den
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_mass<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    mass: f32
-) -> jobject {
-    let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
-    let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::mass(this, mass), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1contact_1force_1event_1threshold<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, threshold: jfloat) -> jlong {
+    let it = &*(ptr as *mut __JNI_ColliderBuilder);
+
+    let val = it.__wrapped_contact_force_event_threshold(threshold);
+    let it = Box::from_raw(ptr as *mut __JNI_ColliderBuilder);
+    
+
+    let val = val;
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2670,16 +3868,17 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_mas
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_mass_properties<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    mass_properties: MassProperties
-) -> jobject {
-    let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
-    let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::mass_properties(this, mass_properties), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1enabled<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, enabled: jboolean) -> jlong {
+    let it = &*(ptr as *mut __JNI_ColliderBuilder);
+
+    let val = it.__wrapped_enabled(enabled == 1);
+    let it = Box::from_raw(ptr as *mut __JNI_ColliderBuilder);
+    
+
+    let val = val;
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2691,16 +3890,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_mas
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_contact_force_event_threshold<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    threshold: f32
-) -> jobject {
-    let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
-    let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::contact_force_event_threshold(this, threshold), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1clone<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    let it = &*(ptr as *mut __JNI_ColliderBuilder);
+
+    let val = it.__wrapped_clone();
+    (Box::leak(Box::new(val)) as *mut ColliderBuilder) as jlong
 }
 
 #[no_mangle]
@@ -2712,16 +3908,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_con
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_translation<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    translation: Vector3
-) -> jobject {
-    let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
-    let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::translation(this, translation.into()), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1clone_1from<'local, >(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, other: jlong) -> () {
+    let it = &mut *(ptr as *mut __JNI_ColliderBuilder);
+    let other = &*(other as *mut ColliderBuilder);
+
+    it.__wrapped_clone_from(&other)
 }
 
 #[no_mangle]
@@ -2733,58 +3926,100 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_tra
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_rotation<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    rotation: Vector3
-) -> jobject {
-    let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
-    let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::rotation(this, rotation.into()), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_1free<'local, >(_env: JNIEnv<'local>, _class: JClass<'local>, ptr: jlong) {
+    let it = Box::from_raw(ptr as *mut __JNI_ColliderBuilder);
+    
 }
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_position<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    pos: Vector3
-) -> jobject {
-    let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
-    let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::position(this, pos.into()), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+#[allow(non_camel_case_types)]
+pub struct __JNI_Triple<A: Clone, B: Clone, C: Clone> {
+    pub a: *mut A,
+    pub b: *mut B,
+    pub c: *mut C,
 }
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_position_wrt_parent<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    pos: Vector3
-) -> jobject {
-    let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
-    let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::position_wrt_parent(this, pos.into()), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+impl<A: Clone, B: Clone, C: Clone> __JNI_Triple<A, B, C> {
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn to_rust(&self) -> Triple<A, B, C> {
+        Triple {
+            a: (&mut *self.a).clone(),
+            b: (&mut *self.b).clone(),
+            c: (&mut *self.c).clone(),
+        }
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_of(first: A, second: B, third: C) -> Self {
+        let base = Triple::of(first, second, third);
+
+        Self {
+            a: Box::leak(Box::new(base.a)) as *mut A,
+            b: Box::leak(Box::new(base.b)) as *mut B,
+            c: Box::leak(Box::new(base.c)) as *mut C,
+        }
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_first(&self, ) -> A {
+        Triple::first(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_second(&self, ) -> B {
+        Triple::second(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_third(&self, ) -> C {
+        Triple::third(&self.to_rust()).clone()
+    }
 }
 
 #[no_mangle]
@@ -2796,16 +4031,14 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_pos
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_delta<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    delta: Vector3
-) -> jobject {
-    let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
-    let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::delta(this, delta.into()), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Triple_jni_1init_1of<'local, A: Clone, B: Clone, C: Clone>(mut env: JNIEnv<'local>, obj: JObject<'local>, first: jlong, second: jlong, third: jlong) -> jlong {
+        let first = &*(first as *mut A);
+    let second = &*(second as *mut B);
+    let third = &*(third as *mut C);
+    let it = __JNI_Triple::__wrapped_of(first.clone(), second.clone(), third.clone());
+    (Box::leak(Box::new(it)) as *mut __JNI_Triple<A, B, C>) as jlong
 }
 
 #[no_mangle]
@@ -2817,16 +4050,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_del
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_enabled<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    enabled: bool
-) -> jobject {
-    let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
-    let this = this.clone();
-    object_to_jobject(env, ColliderBuilder::enabled(this, enabled), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Triple_jni_1first<'local, A: Clone, B: Clone, C: Clone>(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    let it = &*(ptr as *mut __JNI_Triple<A, B, C>);
+
+    let val = it.__wrapped_first();
+    (Box::leak(Box::new(val)) as *mut A) as jlong
 }
 
 #[no_mangle]
@@ -2838,14 +4068,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_ena
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_clone<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject {
-    let this: &ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
-    object_to_jobject(env, ColliderBuilder::clone(this), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Triple_jni_1second<'local, A: Clone, B: Clone, C: Clone>(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    let it = &*(ptr as *mut __JNI_Triple<A, B, C>);
+
+    let val = it.__wrapped_second();
+    (Box::leak(Box::new(val)) as *mut B) as jlong
 }
 
 #[no_mangle]
@@ -2857,15 +4086,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_clo
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_clone_from<'local>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong,
-    other: &ColliderBuilder
-) -> jobject {
-    let this: &mut ColliderBuilder = jlong_to_pointer::<ColliderBuilder>(this).as_mut().unwrap();
-    object_to_jobject(env, ColliderBuilder::clone_from(this, other), "com/dimforge/rapier3d/ColliderBuilder".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Triple_jni_1third<'local, A: Clone, B: Clone, C: Clone>(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    let it = &*(ptr as *mut __JNI_Triple<A, B, C>);
+
+    let val = it.__wrapped_third();
+    (Box::leak(Box::new(val)) as *mut C) as jlong
 }
 
 #[no_mangle]
@@ -2877,65 +4104,85 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_ColliderBuilder_jni_clo
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Triple_jni_of<'local, A, B, C>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    first: A,
-    second: B,
-    third: C
-) -> jobject where
-    A: Clone,
-    B: Clone,
-    C: Clone,
- {
-    object_to_jobject(env, Triple::of(first, second, third), "com/dimforge/rapier3d/Triple".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Triple_jni_1free<'local, A: Clone, B: Clone, C: Clone>(_env: JNIEnv<'local>, _class: JClass<'local>, ptr: jlong) {
+    let it = Box::from_raw(ptr as *mut __JNI_Triple<A, B, C>);
+    let _ = Box::from_raw(it.a);
+let _ = Box::from_raw(it.b);
+let _ = Box::from_raw(it.c);
 }
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Triple_jni_first<'local, A, B, C>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject where
-    A: Clone,
-    B: Clone,
-    C: Clone,
- {
-    let this: &Triple<A, B, C> = jlong_to_pointer::<Triple<A, B, C>>(this).as_mut().unwrap();
-    object_to_jobject(env, Triple::first(this), "com/dimforge/rapier3d/Triple".to_string())
+#[allow(non_camel_case_types)]
+pub struct __JNI_Tuple<A: Clone, B: Clone> {
+    pub a: *mut A,
+    pub b: *mut B,
 }
 
-#[no_mangle]
-#[allow(
-    unused_mut,
-    unused_variables,
-    unused_unsafe,
-    non_snake_case,
-    improper_ctypes_definitions,
-    no_mangle_generic_items,
-    deprecated,
-)]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Triple_jni_second<'local, A, B, C>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject where
-    A: Clone,
-    B: Clone,
-    C: Clone,
- {
-    let this: &Triple<A, B, C> = jlong_to_pointer::<Triple<A, B, C>>(this).as_mut().unwrap();
-    object_to_jobject(env, Triple::second(this), "com/dimforge/rapier3d/Triple".to_string())
+impl<A: Clone, B: Clone> __JNI_Tuple<A, B> {
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn to_rust(&self) -> Tuple<A, B> {
+        Tuple {
+            a: (&mut *self.a).clone(),
+            b: (&mut *self.b).clone(),
+        }
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_of(first: A, second: B) -> Self {
+        let base = Tuple::of(first, second);
+
+        Self {
+            a: Box::leak(Box::new(base.a)) as *mut A,
+            b: Box::leak(Box::new(base.b)) as *mut B,
+        }
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_first(&self, ) -> A {
+        Tuple::first(&self.to_rust()).clone()
+    }
+
+    #[allow(
+        unused_mut,
+        unused_variables,
+        unused_unsafe,
+        non_snake_case,
+        improper_ctypes_definitions,
+        no_mangle_generic_items,
+        deprecated,
+        missing_docs,
+    )]
+    pub unsafe fn __wrapped_second(&self, ) -> B {
+        Tuple::second(&self.to_rust()).clone()
+    }
 }
 
 #[no_mangle]
@@ -2947,18 +4194,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Triple_jni_second<'loca
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Triple_jni_third<'local, A, B, C>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject where
-    A: Clone,
-    B: Clone,
-    C: Clone,
- {
-    let this: &Triple<A, B, C> = jlong_to_pointer::<Triple<A, B, C>>(this).as_mut().unwrap();
-    object_to_jobject(env, Triple::third(this), "com/dimforge/rapier3d/Triple".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Tuple_jni_1init_1of<'local, A: Clone, B: Clone>(mut env: JNIEnv<'local>, obj: JObject<'local>, first: jlong, second: jlong) -> jlong {
+        let first = &*(first as *mut A);
+    let second = &*(second as *mut B);
+    let it = __JNI_Tuple::__wrapped_of(first.clone(), second.clone());
+    (Box::leak(Box::new(it)) as *mut __JNI_Tuple<A, B>) as jlong
 }
 
 #[no_mangle]
@@ -2970,17 +4212,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Triple_jni_third<'local
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Tuple_jni_of<'local, A, B>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    first: A,
-    second: B
-) -> jobject where
-    A: Clone,
-    B: Clone,
- {
-    object_to_jobject(env, Tuple::of(first, second), "com/dimforge/rapier3d/Tuple".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Tuple_jni_1first<'local, A: Clone, B: Clone>(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    let it = &*(ptr as *mut __JNI_Tuple<A, B>);
+
+    let val = it.__wrapped_first();
+    (Box::leak(Box::new(val)) as *mut A) as jlong
 }
 
 #[no_mangle]
@@ -2992,17 +4230,13 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Tuple_jni_of<'local, A,
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Tuple_jni_first<'local, A, B>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject where
-    A: Clone,
-    B: Clone,
- {
-    let this: &Tuple<A, B> = jlong_to_pointer::<Tuple<A, B>>(this).as_mut().unwrap();
-    object_to_jobject(env, Tuple::first(this), "com/dimforge/rapier3d/Tuple".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Tuple_jni_1second<'local, A: Clone, B: Clone>(mut env: JNIEnv<'local>, class: JClass<'local>, ptr: jlong, ) -> jlong {
+    let it = &*(ptr as *mut __JNI_Tuple<A, B>);
+
+    let val = it.__wrapped_second();
+    (Box::leak(Box::new(val)) as *mut B) as jlong
 }
 
 #[no_mangle]
@@ -3014,16 +4248,11 @@ pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Tuple_jni_first<'local,
     improper_ctypes_definitions,
     no_mangle_generic_items,
     deprecated,
+    missing_docs,
 )]
-pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Tuple_jni_second<'local, A, B>(
-    mut env: *mut jni::JNIEnv<'local>,
-    class: jni::objects::JClass<'local>,
-    this: jlong
-) -> jobject where
-    A: Clone,
-    B: Clone,
- {
-    let this: &Tuple<A, B> = jlong_to_pointer::<Tuple<A, B>>(this).as_mut().unwrap();
-    object_to_jobject(env, Tuple::second(this), "com/dimforge/rapier3d/Tuple".to_string())
+pub unsafe extern "system" fn Java_com_dimforge_rapier3d_Tuple_jni_1free<'local, A: Clone, B: Clone>(_env: JNIEnv<'local>, _class: JClass<'local>, ptr: jlong) {
+    let it = Box::from_raw(ptr as *mut __JNI_Tuple<A, B>);
+    let _ = Box::from_raw(it.a);
+let _ = Box::from_raw(it.b);
 }
 

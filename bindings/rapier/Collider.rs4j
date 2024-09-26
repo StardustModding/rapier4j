@@ -1,4 +1,4 @@
-class Collider {
+wrapped class Collider {
     // =============== Normal methods ===============
 
     fn is_enabled() -> bool;
@@ -19,7 +19,7 @@ class Collider {
     fn volume() -> f32;
     fn density() -> f32;
     fn mass() -> f32;
-    fn shape() -> Shape;
+    // boxed fn shape() -> Shape;
     fn shared_shape() -> SharedShape;
     fn compute_aabb() -> Aabb;
     fn compute_swept_aabb(next_pos: &Isometry<f32>) -> Aabb;
@@ -49,13 +49,13 @@ class Collider {
     mut fn set_density(density: f32);
     mut fn set_mass(mass: f32);
     mut fn set_mass_properties(mass_properties: MassProperties);
-    mut fn shape_mut() -> Shape;
+    // mut fn shape_mut() -> Shape;
     mut fn set_shape(shape: SharedShape);
 
     // =============== Optional methods ===============
 
-    fn parent() -> RigidBodyHandle;
-    fn position_wrt_parent() -> Isometry<f32>;
+    optional fn parent() -> RigidBodyHandle;
+    // optional fn position_wrt_parent() -> Isometry<f32>;
 
     // =============== Trait methods ===============
 

@@ -1,11 +1,11 @@
-class ColliderBuilder {
+wrapped class ColliderBuilder {
     // =============== Constructors ===============
 
     [new] static fn create(shape: SharedShape) -> ColliderBuilder;
 
     static fn ColliderBuilderCustom::compound(shapes: List<Tuple<Vector3, SharedShape>>) -> ColliderBuilder;
     static fn ball(radius: f32) -> ColliderBuilder;
-    static fn halfspace(outward_normal: #into Vector3) -> ColliderBuilder;
+    // static fn halfspace(outward_normal: #into Vector3) -> ColliderBuilder;
     static fn cylinder(half_height: f32, radius: f32) -> ColliderBuilder;
     static fn round_cylinder(half_height: f32, radius: f32, border_radius: f32) -> ColliderBuilder;
     static fn cone(half_height: f32, radius: f32) -> ColliderBuilder;
@@ -15,9 +15,10 @@ class ColliderBuilder {
     static fn capsule_z(half_height: f32, radius: f32) -> ColliderBuilder;
     static fn cuboid(hx: f32, hy: f32, hz: f32) -> ColliderBuilder;
     static fn round_cuboid(hx: f32, hy: f32, hz: f32, border_radius: f32) -> ColliderBuilder;
-    static fn segment(a: #into Vector3, b: #into Vector3) -> ColliderBuilder;
-    static fn triangle(a: #into Vector3, b: #into Vector3, c: #into Vector3) -> ColliderBuilder;
-    static fn round_triangle(a: #into Vector3, b: #into Vector3, c: #into Vector3, border_radius: f32) -> ColliderBuilder;
+    // TODO:
+    // static fn segment(a: #into Vector3, b: #into Vector3) -> ColliderBuilder;
+    // static fn triangle(a: #into Vector3, b: #into Vector3, c: #into Vector3) -> ColliderBuilder;
+    // static fn round_triangle(a: #into Vector3, b: #into Vector3, c: #into Vector3, border_radius: f32) -> ColliderBuilder;
     static fn heightfield(heights: DMatrix<f32>, scale: Vector<f32>) -> ColliderBuilder;
     
     static fn ColliderBuilderCustom::polyline(vertices: List<Vector3>, indices: Optional<List<Tuple<u32, u32>>>) -> ColliderBuilder;
@@ -44,7 +45,7 @@ class ColliderBuilder {
 
     // =============== Consumed methods ===============
 
-    consumed fn user_data(data: u128) -> ColliderBuilder;
+    // consumed fn user_data(data: u128) -> ColliderBuilder;
     consumed fn collision_groups(groups: InteractionGroups) -> ColliderBuilder;
     consumed fn solver_groups(groups: InteractionGroups) -> ColliderBuilder;
     consumed fn sensor(is_sensor: bool) -> ColliderBuilder;
@@ -59,11 +60,11 @@ class ColliderBuilder {
     consumed fn mass(mass: f32) -> ColliderBuilder;
     consumed fn mass_properties(mass_properties: MassProperties) -> ColliderBuilder;
     consumed fn contact_force_event_threshold(threshold: f32) -> ColliderBuilder;
-    consumed fn translation(translation: #into Vector3) -> ColliderBuilder;
-    consumed fn rotation(rotation: #into Vector3) -> ColliderBuilder;
-    consumed fn position(pos: #into Vector3) -> ColliderBuilder;
-    consumed fn position_wrt_parent(pos: #into Vector3) -> ColliderBuilder;
-    consumed fn delta(delta: #into Vector3) -> ColliderBuilder;
+    // consumed fn translation(translation: #into Vector3) -> ColliderBuilder;
+    // consumed fn rotation(rotation: #into Vector3) -> ColliderBuilder;
+    // consumed fn position(pos: #into Vector3) -> ColliderBuilder;
+    // consumed fn position_wrt_parent(pos: #into Vector3) -> ColliderBuilder;
+    // consumed fn delta(delta: #into Vector3) -> ColliderBuilder;
     consumed fn enabled(enabled: bool) -> ColliderBuilder;
 
     // =============== Trait methods ===============

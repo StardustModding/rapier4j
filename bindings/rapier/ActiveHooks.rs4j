@@ -1,4 +1,4 @@
-class ActiveHooks {
+wrapped class ActiveHooks {
     static fn empty() -> ActiveHooks;
     static fn all() -> ActiveHooks;
     [default] static fn create() -> ActiveHooks;

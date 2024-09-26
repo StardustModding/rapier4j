@@ -1,6 +1,8 @@
 class Vector3 {
-    [new] static fn of(x: f32, y: f32, z: f32) -> Vector3;
-    [default] static fn create() -> Vector3;
+    [rust] field inner: NVector3<f32>;
+    
+    static init fn new(x: f32, y: f32, z: f32) -> Vector3;
+    static init fn default() -> Vector3;
 
     fn x() -> f32;
     fn y() -> f32;

@@ -5,7 +5,7 @@ use parry3d::math::Point;
 
 #[derive(Debug, Clone, Copy, Default, PartialEq, PartialOrd)]
 pub struct Vector3 {
-    inner: NVector3<f32>,
+    pub inner: NVector3<f32>,
 }
 
 impl Vector3 {
